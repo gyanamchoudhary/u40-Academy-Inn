@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 48 24% 96%;
+    --foreground: 220 17% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 17% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 17% 8%;
+    --primary: 228 74% 49%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 18% 91%;
+    --secondary-foreground: 220 17% 8%;
+    --muted: 48 12% 91%;
+    --muted-foreground: 220 7% 39%;
+    --accent: 73 86% 70%;
+    --accent-foreground: 220 17% 8%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 84%;
+    --input: 220 10% 80%;
+    --ring: 228 74% 49%;
+    --radius: 0.25rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 17% 8%;
+    --sidebar-primary: 228 74% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 48 18% 91%;
+    --sidebar-accent-foreground: 220 17% 8%;
+    --sidebar-border: 220 10% 84%;
+    --sidebar-ring: 228 74% 49%;
+  }
+
+  * { @apply border-border; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  button, a { touch-action: manipulation; }
+
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2046d8] focus-visible:ring-offset-2;
+  }
+
+  ::selection { background: #d9f66f; color: #111318; }
+}
+
+@layer utilities {
+  .font-display { font-family: "Manrope", ui-sans-serif, system-ui, sans-serif; }
+  .font-mono { font-family: "Roboto Mono", ui-monospace, monospace; }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(0.75rem, 1.5vw, 1.5rem);
+  }
+
+  .rule-grid {
+    background-image:
+      linear-gradient(rgba(17, 19, 24, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(17, 19, 24, 0.055) 1px, transparent 1px);
+    background-size: 4rem 4rem;
+  }
+
+}
+
+@layer components {
+  .admission-form input,
+  .admission-form textarea,
+  .admission-form button[role="combobox"] {
+    border-radius: 0 !important;
+    background: #f7f6f2 !important;
+    min-height: 3rem;
+    font-size: 1rem;
+  }
+
+  .admission-form input:focus,
+  .admission-form textarea:focus,
+  .admission-form button[role="combobox"]:focus {
+    border-color: #2046d8 !important;
+  }
+
+  .track-shell > div {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #111318 !important;
+  }
+
+  .track-shell button,
+  .track-shell input {
+    border-radius: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
