@@ -1,17 +1,7 @@
-import { getDb } from "../api/queries/connection";
-// TODO: import tables from "./schema"
+// Seeding runs against Cloudflare D1. Write INSERT statements to a .sql
+// file and apply them with:
+//   npx wrangler d1 execute u40-admissions --remote --file=./db/seed.sql
+//
+// TODO: add seed data if needed.
 
-async function seed() {
-  const db = getDb();
-  console.log("Seeding database...");
-
-  // TODO: insert seed data, e.g.
-  // await db.insert(schema.posts).values([
-  //   { title: "First post", content: "Hello world" },
-  // ]);
-
-  console.log("Done.");
-  process.exit(0); // close MySQL connection pool
-}
-
-seed();
+console.log("Seed via wrangler d1 execute — see comment above.");

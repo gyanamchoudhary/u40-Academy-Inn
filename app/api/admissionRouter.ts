@@ -12,9 +12,9 @@ import {
 export const admissionRouter = createRouter({
   submit: publicQuery
     .input(admissionInquirySchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       try {
-        return await createAdmissionInquiry(input);
+        return await createAdmissionInquiry(ctx.db, input);
       } catch (error) {
         console.error("Failed to create admission inquiry", error);
         throw new TRPCError({
@@ -26,8 +26,9 @@ export const admissionRouter = createRouter({
 
   track: publicQuery
     .input(trackApplicationSchema)
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const inquiry = await findAdmissionInquiryForTracking(
+        ctx.db,
         input.referenceCode,
         input.phone,
       );

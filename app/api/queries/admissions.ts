@@ -1,15 +1,20 @@
-import { randomBytes } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { admissionInquiries, type AdmissionInquiry } from "@db/schema";
 import type {
   AdmissionInquiryInput,
   PublicAdmissionInquiry,
 } from "@contracts/admissions";
-import { getDb } from "./connection";
+import type { Database } from "./connection";
 
 function generateReferenceCode() {
   const year = new Date().getFullYear();
-  const suffix = randomBytes(4).toString("hex").toUpperCase();
+  const bytes = new Uint8Array(4);
+  crypto.getRandomValues(bytes);
+  const suffix = Array.from(bytes, (b) =>
+    b.toString(16).padStart(2, "0"),
+  )
+    .join("")
+    .toUpperCase();
   return `U40-${year}-${suffix}`;
 }
 
@@ -30,22 +35,20 @@ function toPublicInquiry(inquiry: AdmissionInquiry): PublicAdmissionInquiry {
   };
 }
 
-export async function createAdmissionInquiry(input: AdmissionInquiryInput) {
+export async function createAdmissionInquiry(
+  db: Database,
+  input: AdmissionInquiryInput,
+) {
   const { consent: _consent, ...details } = input;
-  const db = getDb();
   const referenceCode = generateReferenceCode();
 
-  const [{ id }] = await db
+  const [inquiry] = await db
     .insert(admissionInquiries)
     .values({
       ...details,
       referenceCode,
     })
-    .$returningId();
-
-  const inquiry = await db.query.admissionInquiries.findFirst({
-    where: eq(admissionInquiries.id, id),
-  });
+    .returning();
 
   if (!inquiry) {
     throw new Error("Admission inquiry could not be saved");
@@ -55,10 +58,11 @@ export async function createAdmissionInquiry(input: AdmissionInquiryInput) {
 }
 
 export async function findAdmissionInquiryForTracking(
+  db: Database,
   referenceCode: string,
   phone: string,
 ) {
-  const inquiry = await getDb().query.admissionInquiries.findFirst({
+  const inquiry = await db.query.admissionInquiries.findFirst({
     where: eq(admissionInquiries.referenceCode, referenceCode.trim().toUpperCase()),
   });
 
