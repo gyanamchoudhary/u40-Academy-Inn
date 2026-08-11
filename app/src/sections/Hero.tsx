@@ -37,8 +37,8 @@ export function Hero() {
           </div>
 
           <div className="relative col-span-12 min-h-[32rem] overflow-hidden border-t border-black/10 lg:col-span-5 lg:border-l lg:border-t-0">
-            <img src="/assets/u40-campus-hero-v2.png" alt="Residential science students walking toward a laboratory classroom" className="absolute inset-0 h-full w-full object-cover" width="900" height="1200" fetchPriority="high" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+            <img src="/assets/u40-hostel-exterior.png" alt="U40 Academy Inn residential building in Malda" className="absolute inset-0 h-full w-full object-cover object-[52%_50%]" width="1212" height="1298" fetchPriority="high" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-black/10" />
             <div className="absolute left-5 top-5 bg-[#d9f66f] px-4 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[#111318] sm:left-8 sm:top-8">Established 2012</div>
             <div className="absolute inset-x-0 bottom-0 grid grid-cols-2 bg-[#111318]/90 text-white backdrop-blur-sm">
               {heroStats.map((stat) => (

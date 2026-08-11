@@ -2,17 +2,19 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "u40-academy-inn",
   "main": "api/worker.ts",
-  "compatibility_date": "2026-01-01",
+  "compatibility_date": "2026-08-02",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist/public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "u40-admissions",
-      "database_id": "416340b3-0684-4051-85f7-cad2e1fd6a22",
+      "database_id": "86fe97ac-eaf9-4b1f-842c-a9167898e2cf",
       "migrations_dir": "db/migrations"
     }
   ]

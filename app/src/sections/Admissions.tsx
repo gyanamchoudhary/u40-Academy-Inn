@@ -1,7 +1,6 @@
 import { Check, FileText, Phone } from "lucide-react";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionHeading } from "@/components/site/SectionHeading";
-import { TrackApplication } from "@/components/site/TrackApplication";
 import { admissionSteps, institute, requiredDocuments } from "@/data/institute";
 
 export function Admissions() {
@@ -40,10 +39,6 @@ export function Admissions() {
           </div>
         </div>
 
-        <div className="mt-16 grid items-start gap-8 border-t border-black/15 pt-12 lg:grid-cols-[0.7fr_1.3fr]">
-          <div><p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2046d8]">Already applied?</p><h3 className="mt-4 text-3xl font-semibold tracking-[-0.04em]">Track an existing inquiry.</h3><p className="mt-4 max-w-md text-sm leading-7 text-[#60646c]">Use the reference code from your confirmation and the registered phone number.</p></div>
-          <div className="track-shell"><TrackApplication /></div>
-        </div>
       </div>
     </section>
   );

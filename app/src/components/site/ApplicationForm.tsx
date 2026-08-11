@@ -1,11 +1,11 @@
 import { useState, type FormEvent } from "react";
-import { CheckCircle2, Copy, Loader2, Send } from "lucide-react";
+import { CheckCircle2, Loader2, PhoneCall, Send } from "lucide-react";
 import {
   BOARD_OPTIONS,
   CLASS_OPTIONS,
   COURSE_OPTIONS,
   type AdmissionInquiryInput,
-  type PublicAdmissionInquiry,
+  type AdmissionInquiryConfirmation,
 } from "@contracts/admissions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -63,8 +63,7 @@ function FieldLabel({ children, required = false }: { children: string; required
 
 export function ApplicationForm() {
   const [form, setForm] = useState<FormState>(initialForm);
-  const [submitted, setSubmitted] = useState<PublicAdmissionInquiry | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [submitted, setSubmitted] = useState<AdmissionInquiryConfirmation | null>(null);
   const submitInquiry = trpc.admission.submit.useMutation();
 
   const update = <K extends keyof FormState>(field: K, value: FormState[K]) => {
@@ -73,7 +72,6 @@ export function ApplicationForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setCopied(false);
 
     const payload: AdmissionInquiryInput = {
       ...form,
@@ -92,12 +90,6 @@ export function ApplicationForm() {
     });
   };
 
-  const copyReference = async () => {
-    if (!submitted) return;
-    await navigator.clipboard.writeText(submitted.referenceCode);
-    setCopied(true);
-  };
-
   if (submitted) {
     return (
       <div className="border border-black/15 bg-white p-7 sm:p-8">
@@ -108,28 +100,15 @@ export function ApplicationForm() {
           Inquiry received.
         </h3>
         <p className="mt-3 leading-7 text-slate-600">
-          Thank you, {submitted.studentName}. Your {submitted.courseInterested} inquiry has been saved in the U40 admissions system. The team will contact the guardian using the phone number ending in {submitted.phoneLast4}.
+          Thank you, {submitted.studentName}. Your {submitted.courseInterested} enquiry has been received. Our admissions team will call the guardian using the phone number provided in the form.
         </p>
 
-        <div className="mt-7 bg-[#111318] p-6 text-white">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#d9f66f]">
-            Your tracking reference
-          </p>
-          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="font-mono text-2xl font-black tracking-wide">{submitted.referenceCode}</p>
-            <Button
-              type="button"
-              onClick={copyReference}
-              className="rounded-none bg-[#d9f66f] font-bold text-[#111318] hover:bg-white"
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              {copied ? "Copied" : "Copy reference"}
-            </Button>
+        <div className="mt-7 flex items-start gap-4 bg-[#111318] p-6 text-white">
+          <PhoneCall className="mt-0.5 h-6 w-6 shrink-0 text-[#d9f66f]" />
+          <div>
+            <p className="font-semibold">What happens next?</p>
+            <p className="mt-2 text-sm leading-7 text-white/65">A counsellor will contact you to discuss the student’s programme, campus visit and admission requirements.</p>
           </div>
-        </div>
-
-        <div className="mt-6 border border-slate-200 bg-[#f7f6f2] p-5 text-sm leading-7 text-slate-600">
-          Keep this reference code safe. You can use it with the registered phone number in the “Track application” panel. Submitted on {new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(submitted.createdAt)}.
         </div>
 
         <Button

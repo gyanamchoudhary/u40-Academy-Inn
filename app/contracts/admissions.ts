@@ -62,32 +62,9 @@ export const admissionInquirySchema = z.object({
   consent: z.boolean().refine((value) => value, "Consent is required"),
 });
 
-export const trackApplicationSchema = z.object({
-  referenceCode: z.string().trim().min(8, "Enter the full reference code").max(24),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\+?[0-9][0-9\s-]{8,15}$/, "Enter the phone number used in the application"),
-});
-
-export const APPLICATION_STATUSES = [
-  "submitted",
-  "contacted",
-  "under_review",
-  "admitted",
-  "closed",
-] as const;
-
-export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
-
-export type PublicAdmissionInquiry = {
-  referenceCode: string;
+export type AdmissionInquiryConfirmation = {
   studentName: string;
   courseInterested: string;
-  status: ApplicationStatus;
-  phoneLast4: string;
-  createdAt: Date;
 };
 
 export type AdmissionInquiryInput = z.infer<typeof admissionInquirySchema>;
-export type TrackApplicationInput = z.infer<typeof trackApplicationSchema>;

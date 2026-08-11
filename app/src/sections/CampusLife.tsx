@@ -16,7 +16,20 @@ export function CampusLife() {
       <div className="mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-10">
         <div className="page-grid gap-y-12">
           <div className="col-span-12 lg:col-span-5"><SectionHeading dark eyebrow="Life on campus" title="Everything students need. Nothing that distracts them." description="The residential environment is designed around safety, focus and sustainable study habits—not just accommodation." /></div>
-          <div className="col-span-12 overflow-hidden lg:col-span-7"><img src="/assets/u40-campus-study-v2.png" alt="Students studying together with guidance from a resident teacher" className="aspect-[16/10] h-full w-full object-cover" loading="lazy" width="1536" height="960" /></div>
+          <div className="col-span-12 grid min-h-[34rem] grid-cols-2 grid-rows-2 gap-1 overflow-hidden lg:col-span-7">
+            <figure className="group relative row-span-2 overflow-hidden bg-white/5">
+              <img src="/assets/u40-hostel-room.png" alt="A clean single room at U40 Academy Inn with a study desk, bed and window" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]" loading="lazy" width="1086" height="1448" />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-5 pb-5 pt-16 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-white">Simple, private study space</figcaption>
+            </figure>
+            <figure className="group relative overflow-hidden bg-white/5">
+              <img src="/assets/u40-meal-fish.png" alt="A balanced Bengali-style hostel meal with rice, fish, dal and vegetables" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]" loading="lazy" width="1536" height="1024" />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-5 pb-5 pt-14 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-white">Fresh Bengali-style meals</figcaption>
+            </figure>
+            <figure className="group relative overflow-hidden bg-white/5">
+              <img src="/assets/u40-breakfast.png" alt="Ghugni muri, tea and biscuits served for hostel breakfast" className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]" loading="lazy" width="1536" height="1024" />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-5 pb-5 pt-14 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-white">A familiar start to the day</figcaption>
+            </figure>
+          </div>
         </div>
 
         <div className="mt-16 grid border-l border-t border-white/15 sm:grid-cols-2 lg:grid-cols-3">

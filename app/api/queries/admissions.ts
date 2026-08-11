@@ -1,9 +1,5 @@
-import { eq } from "drizzle-orm";
-import { admissionInquiries, type AdmissionInquiry } from "@db/schema";
-import type {
-  AdmissionInquiryInput,
-  PublicAdmissionInquiry,
-} from "@contracts/admissions";
+import { admissionInquiries } from "@db/schema";
+import type { AdmissionInquiryInput } from "@contracts/admissions";
 import type { Database } from "./connection";
 
 function generateReferenceCode() {
@@ -16,23 +12,6 @@ function generateReferenceCode() {
     .join("")
     .toUpperCase();
   return `U40-${year}-${suffix}`;
-}
-
-function normalizePhone(phone: string) {
-  return phone.replace(/\D/g, "");
-}
-
-function toPublicInquiry(inquiry: AdmissionInquiry): PublicAdmissionInquiry {
-  const digits = normalizePhone(inquiry.phone);
-
-  return {
-    referenceCode: inquiry.referenceCode,
-    studentName: inquiry.studentName,
-    courseInterested: inquiry.courseInterested,
-    status: inquiry.status,
-    phoneLast4: digits.slice(-4),
-    createdAt: inquiry.createdAt,
-  };
 }
 
 export async function createAdmissionInquiry(
@@ -54,28 +33,8 @@ export async function createAdmissionInquiry(
     throw new Error("Admission inquiry could not be saved");
   }
 
-  return toPublicInquiry(inquiry);
-}
-
-export async function findAdmissionInquiryForTracking(
-  db: Database,
-  referenceCode: string,
-  phone: string,
-) {
-  const inquiry = await db.query.admissionInquiries.findFirst({
-    where: eq(admissionInquiries.referenceCode, referenceCode.trim().toUpperCase()),
-  });
-
-  if (!inquiry) {
-    return null;
-  }
-
-  const storedPhone = normalizePhone(inquiry.phone).slice(-10);
-  const suppliedPhone = normalizePhone(phone).slice(-10);
-
-  if (!storedPhone || storedPhone !== suppliedPhone) {
-    return null;
-  }
-
-  return toPublicInquiry(inquiry);
+  return {
+    studentName: inquiry.studentName,
+    courseInterested: inquiry.courseInterested,
+  };
 }

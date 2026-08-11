@@ -1,13 +1,7 @@
 import { TRPCError } from "@trpc/server";
-import {
-  admissionInquirySchema,
-  trackApplicationSchema,
-} from "@contracts/admissions";
+import { admissionInquirySchema } from "@contracts/admissions";
 import { createRouter, publicQuery } from "./middleware";
-import {
-  createAdmissionInquiry,
-  findAdmissionInquiryForTracking,
-} from "./queries/admissions";
+import { createAdmissionInquiry } from "./queries/admissions";
 
 export const admissionRouter = createRouter({
   submit: publicQuery
@@ -22,25 +16,5 @@ export const admissionRouter = createRouter({
           message: "We could not submit the inquiry right now. Please try again.",
         });
       }
-    }),
-
-  track: publicQuery
-    .input(trackApplicationSchema)
-    .query(async ({ input, ctx }) => {
-      const inquiry = await findAdmissionInquiryForTracking(
-        ctx.db,
-        input.referenceCode,
-        input.phone,
-      );
-
-      if (!inquiry) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message:
-            "No application matched that reference code and phone number.",
-        });
-      }
-
-      return inquiry;
     }),
 });

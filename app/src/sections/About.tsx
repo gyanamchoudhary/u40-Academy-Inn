@@ -29,7 +29,7 @@ export function About() {
         </div>
 
         <div className="mt-20 grid overflow-hidden bg-[#111318] lg:grid-cols-[1.2fr_0.8fr]">
-          <img src="/assets/u40-science-lab-v2.png" alt="Science students conducting laboratory work under teacher supervision" className="h-full min-h-[24rem] w-full object-cover" loading="lazy" width="1536" height="1024" />
+          <img src="/assets/u40-classroom.png" alt="Bright U40 classroom with individual desks and a teaching board" className="h-full min-h-[24rem] w-full object-cover" loading="lazy" width="1536" height="1024" />
           <div className="flex flex-col justify-between p-8 text-white sm:p-12">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#d9f66f]">The U40 model</p>
             <blockquote className="mt-16 text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl">“One campus. One routine. Complete attention on the student.”</blockquote>
