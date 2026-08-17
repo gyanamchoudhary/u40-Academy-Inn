@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.u40academyinn.com/sitemap.xml
+Sitemap: https://u40academy.com/sitemap.xml

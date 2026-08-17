@@ -42,3 +42,4 @@ coverage/
 
 # Local performance audit reports
 lighthouse-*.json
+.wrangler/

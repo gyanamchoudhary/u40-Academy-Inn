@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.u40academyinn.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://u40academy.com/</loc>
+    <lastmod>2026-08-18</lastmod>
   </url>
   <url>
-    <loc>https://www.u40academyinn.com/privacy</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://u40academy.com/privacy/</loc>
+    <lastmod>2026-08-18</lastmod>
   </url>
   <url>
-    <loc>https://www.u40academyinn.com/terms</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://u40academy.com/terms/</loc>
+    <lastmod>2026-08-18</lastmod>
   </url>
 </urlset>

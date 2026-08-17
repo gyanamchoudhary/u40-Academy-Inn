@@ -7,7 +7,7 @@ export const institute = {
   address:
     "NH-12, Gabgachi, Jadupur, Behind TVS Amrith Path, Near PRM Centre, Malda, West Bengal 732103",
   phones: ["+91 62966 17524", "+91 97752 89654", "+91 94341 66316"],
-  website: "www.u40academyinn.com",
+  website: "u40academy.com",
 };
 
 export const navItems = [
