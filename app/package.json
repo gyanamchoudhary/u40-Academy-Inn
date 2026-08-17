@@ -16,8 +16,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "cf:dev": "vite build && wrangler dev",
-    "cf:check": "vite build && wrangler deploy --dry-run",
-    "deploy": "vite build && wrangler deploy"
+    "cf:check": "npm run build && wrangler deploy --dry-run",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.3",
