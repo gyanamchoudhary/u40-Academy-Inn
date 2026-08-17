@@ -5,6 +5,7 @@ import { Admissions } from "@/sections/Admissions";
 import { CampusLife } from "@/sections/CampusLife";
 import { Contact } from "@/sections/Contact";
 import { Hero } from "@/sections/Hero";
+import { FoodMenu } from "@/sections/FoodMenu";
 import { Programs } from "@/sections/Programs";
 import { Results } from "@/sections/Results";
 
@@ -17,6 +18,7 @@ export default function Home() {
         <About />
         <Programs />
         <CampusLife />
+        <FoodMenu />
         <Results />
         <Admissions />
         <Contact />

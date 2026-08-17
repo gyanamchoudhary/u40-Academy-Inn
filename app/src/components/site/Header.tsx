@@ -27,7 +27,7 @@ export function Header() {
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary navigation">
-          {navItems.slice(0, 5).map((item) => (
+          {navItems.slice(0, 6).map((item) => (
             <a key={item.href} href={item.href} className="text-sm font-semibold text-[#4d5159] transition duration-200 hover:text-[#2046d8]">{item.label}</a>
           ))}
         </nav>

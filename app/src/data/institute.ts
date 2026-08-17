@@ -14,6 +14,7 @@ export const navItems = [
   { label: "About", href: "#about" },
   { label: "Programs", href: "#programs" },
   { label: "Hostel", href: "#hostel" },
+  { label: "Food Menu", href: "#food-menu" },
   { label: "Facilities", href: "#facilities" },
   { label: "Results", href: "#results" },
   { label: "Admissions", href: "#admissions" },
