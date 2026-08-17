@@ -8,21 +8,21 @@ const moments = [
   {
     time: "06:30",
     period: "Morning",
-    title: "Wake, reset, begin.",
+    title: "Prepare, settle, begin.",
     description:
-      "Breakfast and a focused study block set a calm tone before classes begin.",
-    image: "/assets/u40-breakfast.png",
-    alt: "Ghugni muri, tea and biscuits served for breakfast at U40",
+      "A calm room routine helps students arrive organised and ready for the first study block.",
+    image: "/assets/u40-day-morning-v2.png",
+    alt: "U40 students preparing books and making their beds at sunrise",
     position: "object-center",
   },
   {
     time: "10:00",
     period: "Class hours",
-    title: "Learn by doing.",
+    title: "Think it through.",
     description:
-      "Science moves between explanation, practical work, problem solving and assessment.",
-    image: "/assets/u40-science-lab-v2.png",
-    alt: "U40 students carrying out practical science work with a teacher",
+      "Discussion-led classes ask students to explain, question and solve—not simply copy from the board.",
+    image: "/assets/u40-day-class-v2.png",
+    alt: "A U40 student discussing a physics problem with his teacher and classmates",
     position: "object-center",
   },
   {
@@ -30,9 +30,9 @@ const moments = [
     period: "Guided study",
     title: "Questions get answered.",
     description:
-      "Resident teachers support revision, doubt clearing and preparation for the next day.",
-    image: "/assets/u40-campus-study-v2.png",
-    alt: "A teacher guiding U40 students during evening study",
+      "Resident teachers make time for one-to-one doubt clearing, revision and preparation for tomorrow.",
+    image: "/assets/u40-day-study-v2.png",
+    alt: "A U40 teacher giving one-to-one help during evening study",
     position: "object-center",
   },
   {
@@ -40,9 +40,9 @@ const moments = [
     period: "Night",
     title: "Rest with tomorrow ready.",
     description:
-      "A private room and predictable lights-out routine help students recover well.",
-    image: "/assets/u40-hostel-room.png",
-    alt: "A clean U40 hostel room with a bed, desk and window",
+      "A supervised lights-out routine closes the day calmly and helps students recover well.",
+    image: "/assets/u40-day-night-v2.png",
+    alt: "A resident mentor checking in as U40 students return to their hostel rooms at night",
     position: "object-center",
   },
 ];
