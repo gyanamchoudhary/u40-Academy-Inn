@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { trpc } from "@/providers/trpc";
+import { trpc } from "@/lib/trpc";
 
 type FormState = {
   studentName: string;
@@ -53,9 +53,9 @@ const initialForm: FormState = {
   consent: false,
 };
 
-function FieldLabel({ children, required = false }: { children: string; required?: boolean }) {
+function FieldLabel({ children, htmlFor, required = false }: { children: string; htmlFor: string; required?: boolean }) {
   return (
-    <Label className="text-sm font-bold text-[#33373f]">
+    <Label htmlFor={htmlFor} className="text-sm font-bold text-[#33373f]">
       {children} {required ? <span className="text-red-500">*</span> : null}
     </Label>
   );
@@ -64,14 +64,21 @@ function FieldLabel({ children, required = false }: { children: string; required
 export function ApplicationForm() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitted, setSubmitted] = useState<AdmissionInquiryConfirmation | null>(null);
+  const [consentError, setConsentError] = useState(false);
   const submitInquiry = trpc.admission.submit.useMutation();
 
   const update = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setForm((current) => ({ ...current, [field]: value }));
+    if (field === "consent" && value === true) setConsentError(false);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!form.consent) {
+      setConsentError(true);
+      return;
+    }
 
     const payload: AdmissionInquiryInput = {
       ...form,
@@ -92,7 +99,7 @@ export function ApplicationForm() {
 
   if (submitted) {
     return (
-      <div className="border border-black/15 bg-white p-7 sm:p-8">
+      <div className="border border-black/15 bg-white p-7 sm:p-8" role="status" aria-live="polite">
         <span className="flex h-16 w-16 items-center justify-center bg-[#eef1ff] text-[#2046d8]">
           <CheckCircle2 className="h-9 w-9" />
         </span>
@@ -115,7 +122,7 @@ export function ApplicationForm() {
           type="button"
           variant="outline"
           onClick={() => setSubmitted(null)}
-          className="mt-6 rounded-none border-slate-300 font-bold"
+          className="mt-6 border-slate-300 font-bold"
         >
           Submit another inquiry
         </Button>
@@ -137,67 +144,72 @@ export function ApplicationForm() {
             Reserve a counselling call.
           </h3>
         </div>
-        <span className="bg-[#d9f66f] px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[#111318]">Secure form</span>
+        <span className="bg-[#d9f66f] px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[#111318]">Secure form</span>
       </div>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
-          <FieldLabel required>Student name</FieldLabel>
+          <FieldLabel htmlFor="studentName" required>Student name</FieldLabel>
           <Input
+            id="studentName"
             value={form.studentName}
             onChange={(event) => update("studentName", event.target.value)}
             placeholder="Enter full name"
             required
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2">
-          <FieldLabel required>Guardian name</FieldLabel>
+          <FieldLabel htmlFor="guardianName" required>Guardian name</FieldLabel>
           <Input
+            id="guardianName"
             value={form.guardianName}
             onChange={(event) => update("guardianName", event.target.value)}
             placeholder="Father / mother / guardian"
             required
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2">
-          <FieldLabel required>Phone number</FieldLabel>
+          <FieldLabel htmlFor="phone" required>Phone number</FieldLabel>
           <Input
+            id="phone"
             value={form.phone}
             onChange={(event) => update("phone", event.target.value)}
             placeholder="+91 62966 17524"
             required
             inputMode="tel"
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2">
-          <FieldLabel>Email address</FieldLabel>
+          <FieldLabel htmlFor="email">Email address</FieldLabel>
           <Input
+            id="email"
             type="email"
             value={form.email}
             onChange={(event) => update("email", event.target.value)}
             placeholder="student@example.com"
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2">
-          <FieldLabel>Date of birth</FieldLabel>
+          <FieldLabel htmlFor="dateOfBirth">Date of birth</FieldLabel>
           <Input
+            id="dateOfBirth"
             type="date"
             value={form.dateOfBirth}
             onChange={(event) => update("dateOfBirth", event.target.value)}
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2">
-          <FieldLabel required>Current class</FieldLabel>
+          <FieldLabel htmlFor="currentClass" required>Current class</FieldLabel>
           <Select
             value={form.currentClass}
             onValueChange={(value) => update("currentClass", value as FormState["currentClass"])}
           >
-            <SelectTrigger className="h-12 rounded-2xl border-slate-200 bg-slate-50">
+            <SelectTrigger id="currentClass" className="h-12 border-slate-200 bg-white">
               <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
@@ -210,12 +222,12 @@ export function ApplicationForm() {
           </Select>
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <FieldLabel required>Course interested in</FieldLabel>
+          <FieldLabel htmlFor="courseInterested" required>Course interested in</FieldLabel>
           <Select
             value={form.courseInterested}
             onValueChange={(value) => update("courseInterested", value as FormState["courseInterested"])}
           >
-            <SelectTrigger className="h-12 rounded-2xl border-slate-200 bg-slate-50">
+            <SelectTrigger id="courseInterested" className="h-12 border-slate-200 bg-white">
               <SelectValue placeholder="Select course" />
             </SelectTrigger>
             <SelectContent>
@@ -228,12 +240,12 @@ export function ApplicationForm() {
           </Select>
         </div>
         <div className="space-y-2">
-          <FieldLabel required>Board</FieldLabel>
+          <FieldLabel htmlFor="board" required>Board</FieldLabel>
           <Select
             value={form.board}
             onValueChange={(value) => update("board", value as FormState["board"])}
           >
-            <SelectTrigger className="h-12 rounded-2xl border-slate-200 bg-slate-50">
+            <SelectTrigger id="board" className="h-12 border-slate-200 bg-white">
               <SelectValue placeholder="Select board" />
             </SelectTrigger>
             <SelectContent>
@@ -246,67 +258,79 @@ export function ApplicationForm() {
           </Select>
         </div>
         <div className="space-y-2">
-          <FieldLabel>Previous percentage</FieldLabel>
+          <FieldLabel htmlFor="previousPercentage">Previous percentage</FieldLabel>
           <Input
+            id="previousPercentage"
             value={form.previousPercentage}
             onChange={(event) => update("previousPercentage", event.target.value)}
             placeholder="Example: 85%"
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <FieldLabel>School name</FieldLabel>
+          <FieldLabel htmlFor="schoolName">School name</FieldLabel>
           <Input
+            id="schoolName"
             value={form.schoolName}
             onChange={(event) => update("schoolName", event.target.value)}
             placeholder="Last attended school"
-            className="h-12 rounded-2xl border-slate-200 bg-slate-50"
+            className="h-12 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <FieldLabel required>Residential address</FieldLabel>
+          <FieldLabel htmlFor="address" required>Residential address</FieldLabel>
           <Textarea
+            id="address"
             value={form.address}
             onChange={(event) => update("address", event.target.value)}
             placeholder="Village / town, post office, district, state and PIN"
             required
-            className="min-h-24 rounded-2xl border-slate-200 bg-slate-50"
+            className="min-h-24 border-slate-200 bg-white"
           />
         </div>
         <div className="space-y-2 sm:col-span-2">
-          <FieldLabel>Message for the admissions team</FieldLabel>
+          <FieldLabel htmlFor="message">Message for the admissions team</FieldLabel>
           <Textarea
+            id="message"
             value={form.message}
             onChange={(event) => update("message", event.target.value)}
             placeholder="Tell us about the student’s goals, preferred session or scholarship needs."
-            className="min-h-24 rounded-2xl border-slate-200 bg-slate-50"
+            className="min-h-24 border-slate-200 bg-white"
           />
         </div>
       </div>
 
-      <label className="mt-6 flex cursor-pointer items-start gap-3 border border-slate-200 bg-[#f7f6f2] p-4 text-sm leading-6 text-slate-600">
+      <label htmlFor="consent" className="mt-6 flex cursor-pointer items-start gap-3 border border-slate-200 bg-[#f7f6f2] p-4 text-sm leading-6 text-slate-600">
         <Checkbox
+          id="consent"
           checked={form.consent}
           onCheckedChange={(checked) => update("consent", checked === true)}
           className="mt-1"
-          required
+          aria-invalid={consentError}
+          aria-describedby={consentError ? "consent-error" : undefined}
         />
         <span>
           I consent to U40 Academy Inn contacting me about this admission inquiry and understand that campus admission is completed only after document verification.
         </span>
       </label>
 
+      {consentError ? (
+        <p id="consent-error" className="mt-2 text-sm font-bold text-red-600" role="alert">
+          Please confirm consent before submitting.
+        </p>
+      ) : null}
+
       {submitInquiry.error ? (
-        <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+        <div role="alert" aria-live="assertive" className="mt-5 rounded-md border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
           {submitInquiry.error.message}
         </div>
       ) : null}
 
-      <Button
-        type="submit"
-        disabled={submitInquiry.isPending}
-        className="mt-7 h-14 w-full rounded-none bg-[#2046d8] text-base font-bold text-white hover:bg-[#1737ae]"
-      >
+        <Button
+          type="submit"
+          disabled={submitInquiry.isPending}
+          className="mt-7 h-14 w-full bg-[#2046d8] text-base font-bold text-white hover:bg-[#1737ae]"
+        >
         {submitInquiry.isPending ? (
           <>
             <Loader2 className="mr-2 h-5 w-5 animate-spin" />

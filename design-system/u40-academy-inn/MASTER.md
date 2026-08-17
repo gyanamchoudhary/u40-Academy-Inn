@@ -7,8 +7,7 @@
 ---
 
 **Project:** U40 Academy Inn
-**Generated:** 2026-08-02 21:42:34
-**Category:** Biotech / Life Sciences
+**Category:** Residential Science Coaching & Boys’ Hostel
 
 ---
 
@@ -16,53 +15,43 @@
 
 ### Color Palette
 
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#18181B` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#3F3F46` | `--color-secondary` |
-| Accent/CTA | `#EC4899` | `--color-accent` |
-| Background | `#FAFAFA` | `--color-background` |
-| Foreground | `#09090B` | `--color-foreground` |
-| Muted | `#E8ECF0` | `--color-muted` |
-| Border | `#E4E4E7` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| Ring | `#18181B` | `--color-ring` |
-
-**Color Notes:** Editorial black + accent pink
+| Role | Hex | Usage |
+|------|-----|-------|
+| Primary navy | `#071a2d` | Hero, Campus Life, dark sections |
+| Primary blue | `#2046d8` | Links, CTAs, section accents |
+| Accent lime | `#d9f66f` | Highlights, stats, active states |
+| Background cream | `#f7f6f2` | Light section backgrounds |
+| Background warm | `#f7f4ed` | Page wrapper, food section |
+| Card white | `#ffffff` | Cards, form backgrounds |
+| Text primary | `#111318` | Headings, body on light |
+| Text secondary | `#60646c` | Descriptions, captions |
+| Border | `rgba(17,19,24,0.15)` | Dividers, card borders |
+| Muted | `#eef1ff` | Result highlight card |
 
 ### Typography
 
-- **Heading Font:** Exo
-- **Body Font:** Roboto Mono
-- **Mood:** science, technology, research, data, futuristic, precise
-- **Google Fonts:** [Exo + Roboto Mono](https://fonts.google.com/share?selection.family=Exo:wght@300;400;500;600;700|Roboto+Mono:wght@300;400;500;700)
-
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap');
-```
+- **Heading Font:** Manrope (400–800)
+- **Body / Mono Font:** Roboto Mono (400–600)
+- **Mood:** disciplined, academic, editorial, modern
+- **Google Fonts:** `https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&display=swap`
 
 ### Spacing Variables
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--space-xs` | `4px` / `0.25rem` | Tight gaps |
-| `--space-sm` | `8px` / `0.5rem` | Icon gaps, inline spacing |
-| `--space-md` | `16px` / `1rem` | Standard padding |
-| `--space-lg` | `24px` / `1.5rem` | Section padding |
-| `--space-xl` | `32px` / `2rem` | Large gaps |
-| `--space-2xl` | `48px` / `3rem` | Section margins |
-| `--space-3xl` | `64px` / `4rem` | Hero padding |
+| `--space-xs` | `0.25rem` (4px) | Tight gaps |
+| `--space-sm` | `0.5rem` (8px) | Icon gaps |
+| `--space-md` | `1rem` (16px) | Standard padding |
+| `--space-lg` | `1.5rem` (24px) | Section inner gaps |
+| `--space-xl` | `2rem` (32px) | Large gaps |
+| `--space-2xl` | `3rem` (48px) | Section margins |
+| `--space-3xl` | `4rem` (64px) | Hero padding |
 
-### Shadow Depths
+### Radius
 
-| Level | Value | Usage |
-|-------|-------|-------|
-| `--shadow-sm` | `0 1px 2px rgba(0,0,0,0.05)` | Subtle lift |
-| `--shadow-md` | `0 4px 6px rgba(0,0,0,0.1)` | Cards, buttons |
-| `--shadow-lg` | `0 10px 15px rgba(0,0,0,0.1)` | Modals, dropdowns |
-| `--shadow-xl` | `0 20px 25px rgba(0,0,0,0.15)` | Hero images, featured cards |
+- Default radius: `0.25rem` (`4px`)
+- Use `rounded-md` for buttons, inputs, cards.
+- Avoid large radii (`rounded-2xl`, `rounded-full`) to maintain the editorial/brutalist feel.
 
 ---
 
@@ -71,50 +60,34 @@
 ### Buttons
 
 ```css
-/* Primary Button */
 .btn-primary {
-  background: #EC4899;
+  background: #2046d8;
   color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  transition: background 200ms ease;
 }
+.btn-primary:hover { background: #1737ae; }
 
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+.btn-accent {
+  background: #d9f66f;
+  color: #111318;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  transition: background 200ms ease;
 }
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #18181B;
-  border: 2px solid #18181B;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
+.btn-accent:hover { background: #c7ea4e; }
 ```
 
 ### Cards
 
 ```css
 .card {
-  background: #FAFAFA;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+  background: white;
+  border: 1px solid rgba(17, 19, 24, 0.15);
+  padding: 1.5rem;
 }
 ```
 
@@ -122,87 +95,52 @@
 
 ```css
 .input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
-
-.input:focus {
-  border-color: #18181B;
-  outline: none;
-  box-shadow: 0 0 0 3px #18181B20;
-}
-```
-
-### Modals
-
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
-
-.modal {
+  height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
   background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
+  font-size: 1rem;
 }
+.input:focus { border-color: #2046d8; outline: none; }
 ```
 
 ---
 
 ## Style Guidelines
 
-**Style:** Swiss Modernism 2.0
+**Style:** Swiss Editorial / Brutalist-lite
 
-**Keywords:** Grid system, Helvetica, modular, asymmetric, international style, rational, clean, mathematical spacing
+**Keywords:** 12-column grid, rational spacing, high contrast, typographic hierarchy, restrained color, clear hierarchy
 
-**Best For:** Corporate sites, architecture, editorial, SaaS, museums, professional services, documentation
-
-**Key Effects:** display: grid, grid-template-columns: repeat(12 1fr), gap: 1rem, mathematical ratios, clear hierarchy
-
-### Page Pattern
-
-**Pattern Name:** Minimal Single Column
-
-- **Conversion Strategy:** Single CTA focus. Large typography. Lots of whitespace. No nav clutter. Mobile-first.
-- **CTA Placement:** Center, large CTA button
-- **Section Order:** 1. Hero headline, 2. Short description, 3. Benefit bullets (3 max), 4. CTA, 5. Footer
+**Page Pattern:** Single-page scroll with anchored sections.
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Cluttered data
-- ❌ Poor credibility
-
-### Additional Forbidden Patterns
-
-- ❌ **Emojis as icons** — Use SVG icons (Heroicons, Lucide, Simple Icons)
-- ❌ **Missing cursor:pointer** — All clickable elements must have cursor:pointer
-- ❌ **Layout-shifting hovers** — Avoid scale transforms that shift layout
-- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio
-- ❌ **Instant state changes** — Always use transitions (150-300ms)
-- ❌ **Invisible focus states** — Focus states must be visible for a11y
+- ❌ Emojis as icons — use Lucide SVG icons
+- ❌ Missing `cursor:pointer` on clickable elements
+- ❌ Large radii that break the editorial tone (`rounded-2xl`, `rounded-full` buttons)
+- ❌ Low contrast text (maintain 4.5:1 minimum)
+- ❌ Instant state changes — always use transitions (150–300ms)
+- ❌ Invisible focus states
+- ❌ Hard-coded `!important` CSS overrides
 
 ---
 
 ## Pre-Delivery Checklist
 
-Before delivering any UI code, verify:
-
-- [ ] No emojis used as icons (use SVG instead)
-- [ ] All icons from consistent icon set (Heroicons/Lucide)
+- [ ] No emojis used as icons (use SVG/Lucide instead)
+- [ ] All icons from a consistent icon set (Lucide)
 - [ ] `cursor-pointer` on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
+- [ ] Hover states with smooth transitions (150–300ms)
 - [ ] Light mode: text contrast 4.5:1 minimum
 - [ ] Focus states visible for keyboard navigation
 - [ ] `prefers-reduced-motion` respected
 - [ ] Responsive: 375px, 768px, 1024px, 1440px
 - [ ] No content hidden behind fixed navbars
 - [ ] No horizontal scroll on mobile
+- [ ] Images served as WebP/AVIF with fallbacks and `srcset`
+- [ ] Form labels explicitly associated with controls via `htmlFor`/`id`
+- [ ] Privacy & Terms pages linked from footer

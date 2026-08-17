@@ -1,6 +1,7 @@
 import { Check, FileText, Phone } from "lucide-react";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionHeading } from "@/components/site/SectionHeading";
+import { TRPCProvider } from "@/providers/trpc";
 import { admissionSteps, institute, requiredDocuments } from "@/data/institute";
 
 export function Admissions() {
@@ -35,7 +36,9 @@ export function Admissions() {
           </aside>
 
           <div className="admission-shell col-span-12 lg:col-span-8 lg:pl-10">
-            <ApplicationForm />
+            <TRPCProvider>
+              <ApplicationForm />
+            </TRPCProvider>
           </div>
         </div>
 

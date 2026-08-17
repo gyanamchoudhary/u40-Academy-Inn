@@ -1,29 +1,16 @@
-import { Footer } from "@/components/site/Footer";
 import { Header } from "@/components/site/Header";
-import { About } from "@/sections/About";
-import { Admissions } from "@/sections/Admissions";
-import { CampusLife } from "@/sections/CampusLife";
-import { Contact } from "@/sections/Contact";
 import { Hero } from "@/sections/Hero";
-import { FoodMenu } from "@/sections/FoodMenu";
-import { Programs } from "@/sections/Programs";
-import { Results } from "@/sections/Results";
 
-export default function Home() {
+export default function HomeShell() {
   return (
     <div className="min-h-screen bg-[#f7f4ed] font-sans text-[#102235] antialiased">
-      <Header />
+      <div id="header-island">
+        <Header />
+      </div>
       <main id="main-content">
         <Hero />
-        <About />
-        <Programs />
-        <CampusLife />
-        <FoodMenu />
-        <Results />
-        <Admissions />
-        <Contact />
+        <div id="rest-island" />
       </main>
-      <Footer />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export function Footer() {
         </div>
         <div className="mt-12 flex flex-col gap-5 border-t border-white/15 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} {institute.name}. All rights reserved.</p>
-          <div className="flex gap-5"><a href="#top" className="inline-flex items-center gap-2 text-white/70 hover:text-white">Back to top <ArrowUpRight className="h-3.5 w-3.5" /></a><span>Privacy</span><span>Terms</span></div>
+          <div className="flex gap-5"><a href="#top" className="inline-flex items-center gap-2 text-white/70 hover:text-white">Back to top <ArrowUpRight className="h-3.5 w-3.5" /></a><a href="/privacy" className="hover:text-white">Privacy</a><a href="/terms" className="hover:text-white">Terms</a></div>
         </div>
       </div>
     </footer>

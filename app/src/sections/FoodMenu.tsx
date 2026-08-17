@@ -8,6 +8,7 @@ import {
   Soup,
   SunMedium,
 } from "lucide-react";
+import { OptimizedImage } from "@/components/site/OptimizedImage";
 
 const mealTimes = [
   {
@@ -99,13 +100,13 @@ export function FoodMenu() {
 
           <div className="col-span-12 lg:col-span-5">
             <figure className="relative min-h-[26rem] overflow-hidden bg-[#111318] lg:min-h-[31rem]">
-              <img
+              <OptimizedImage
                 src="/assets/u40-meal-fish.png"
                 alt="Fresh Bengali-style lunch with rice, fish curry, dal and vegetables"
                 className="absolute inset-0 h-full w-full object-cover"
-                loading="lazy"
-                width="1536"
-                height="1024"
+                width={1536}
+                height={1024}
+                sizes="(max-width: 1024px) 100vw, 40vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/5 to-transparent" aria-hidden="true" />
               <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">

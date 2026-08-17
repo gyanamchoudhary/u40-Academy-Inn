@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Website Development Proposal — U40 Academy Inn</title>
+  <style>
+    :root {
+      --navy: #12365c;
+      --navy-deep: #0a243f;
+      --orange: #ff6a00;
+      --orange-soft: #fff0e5;
+      --ink: #17202a;
+      --muted: #5f6b78;
+      --line: #d9e0e7;
+      --paper: #ffffff;
+      --wash: #f4f7fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #dfe5ea;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      margin: 8mm auto;
+      overflow: hidden;
+      background: var(--paper);
+      page-break-after: always;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    .inner {
+      padding: 18mm 20mm 15mm;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 8mm;
+      background: linear-gradient(90deg, var(--navy) 0 80%, var(--orange) 80% 100%);
+    }
+
+    .footer {
+      position: absolute;
+      right: 20mm;
+      bottom: 6mm;
+      left: 20mm;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 3mm;
+      color: #75808b;
+      font-size: 8pt;
+    }
+
+    .cover {
+      background: var(--navy-deep);
+      color: white;
+    }
+
+    .cover::before {
+      position: absolute;
+      top: -50mm;
+      right: -40mm;
+      width: 125mm;
+      height: 125mm;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .cover::after {
+      position: absolute;
+      right: -18mm;
+      bottom: -38mm;
+      width: 110mm;
+      height: 110mm;
+      background: var(--orange);
+      clip-path: polygon(68% 0, 100% 0, 100% 100%, 0 100%);
+      content: "";
+      opacity: .92;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      min-height: 297mm;
+      flex-direction: column;
+      padding: 24mm 22mm;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 6mm;
+    }
+
+    .logo-window {
+      width: 24mm;
+      height: 24mm;
+      overflow: hidden;
+      border-radius: 3mm;
+      background: white;
+    }
+
+    .logo-window img {
+      width: 47mm;
+      max-width: none;
+      transform: translate(-11.6mm, -11.6mm);
+    }
+
+    .brand-name {
+      font-size: 17pt;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .brand-sub {
+      margin-top: 1mm;
+      color: rgba(255,255,255,.65);
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .cover-main {
+      margin-top: 60mm;
+      max-width: 145mm;
+    }
+
+    .eyebrow {
+      margin: 0 0 5mm;
+      color: var(--orange);
+      font-size: 8.5pt;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .cover h1 {
+      margin: 0;
+      font-size: 37pt;
+      line-height: 1.04;
+      letter-spacing: -.045em;
+    }
+
+    .cover .lead {
+      max-width: 125mm;
+      margin-top: 9mm;
+      color: rgba(255,255,255,.72);
+      font-size: 14pt;
+      line-height: 1.5;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8mm;
+      margin-top: auto;
+      margin-bottom: 12mm;
+      padding-top: 7mm;
+      border-top: 1px solid rgba(255,255,255,.2);
+    }
+
+    .meta-label {
+      color: rgba(255,255,255,.48);
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      margin-top: 2mm;
+      font-size: 10.5pt;
+      font-weight: 700;
+    }
+
+    .section-number {
+      margin-bottom: 3mm;
+      color: var(--orange);
+      font-size: 9pt;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--navy-deep);
+      font-size: 23pt;
+      line-height: 1.08;
+      letter-spacing: -.035em;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 13pt;
+      line-height: 1.3;
+    }
+
+    p { margin: 0; }
+    .intro { max-width: 150mm; margin-top: 4mm; color: var(--muted); font-size: 11pt; line-height: 1.55; }
+
+    .rule { height: 1px; margin: 6mm 0; background: var(--line); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      margin-top: 8mm;
+    }
+
+    .summary-card {
+      min-height: 38mm;
+      padding: 5mm;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--navy);
+      background: var(--paper);
+    }
+
+    .summary-card.accent { border-top-color: var(--orange); background: var(--orange-soft); }
+    .summary-card p { margin-top: 3mm; color: var(--muted); font-size: 9.5pt; }
+    .summary-card .large { color: var(--navy-deep); font-size: 21pt; font-weight: 800; line-height: 1.1; }
+
+    .statement {
+      margin-top: 7mm;
+      padding: 5mm 6mm;
+      border-left: 4px solid var(--orange);
+      background: var(--wash);
+      color: var(--navy-deep);
+      font-size: 12pt;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .scope-list {
+      margin-top: 7mm;
+      border-top: 1px solid var(--line);
+    }
+
+    .scope-row {
+      display: grid;
+      grid-template-columns: 15mm 48mm 1fr;
+      gap: 5mm;
+      padding: 4mm 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .scope-index {
+      color: var(--orange);
+      font-size: 10pt;
+      font-weight: 800;
+    }
+
+    .scope-title { color: var(--navy-deep); font-weight: 800; }
+    .scope-copy { color: var(--muted); font-size: 9.4pt; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6mm;
+      margin-top: 7mm;
+    }
+
+    .panel {
+      padding: 5mm;
+      border: 1px solid var(--line);
+      background: var(--wash);
+    }
+
+    .panel ul, .checklist {
+      margin: 4mm 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .panel li, .checklist li {
+      position: relative;
+      margin: 0 0 2mm;
+      padding-left: 6mm;
+      color: var(--muted);
+      font-size: 9.4pt;
+    }
+
+    .panel li::before, .checklist li::before {
+      position: absolute;
+      top: .65em;
+      left: 0;
+      width: 2mm;
+      height: 2mm;
+      background: var(--orange);
+      content: "";
+      transform: translateY(-50%);
+    }
+
+    .tech-stack {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3mm;
+      margin-top: 6mm;
+    }
+
+    .tech {
+      padding: 4mm 3mm;
+      border: 1px solid var(--line);
+      text-align: center;
+      color: var(--navy);
+      font-size: 8.5pt;
+      font-weight: 800;
+    }
+
+    .timeline {
+      margin-top: 7mm;
+    }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 27mm 42mm 1fr;
+      gap: 5mm;
+      padding: 4mm 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .phase:last-child { border-bottom: 1px solid var(--line); }
+    .week { color: var(--orange); font-size: 9pt; font-weight: 800; }
+    .phase-name { color: var(--navy-deep); font-weight: 800; }
+    .phase-copy { color: var(--muted); font-size: 9.3pt; }
+
+    .dependency {
+      margin-top: 7mm;
+      padding: 5mm;
+      background: var(--navy-deep);
+      color: white;
+    }
+
+    .dependency h3 { color: white; }
+    .dependency p { margin-top: 3mm; color: rgba(255,255,255,.7); font-size: 9.5pt; }
+
+    table {
+      width: 100%;
+      margin-top: 7mm;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 3mm 4mm;
+      background: var(--navy-deep);
+      color: white;
+      font-size: 8pt;
+      letter-spacing: .08em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 4mm;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    td:last-child, th:last-child { text-align: right; white-space: nowrap; }
+    .cost-title { color: var(--navy-deep); font-weight: 800; }
+    .cost-detail { margin-top: 1mm; color: var(--muted); font-size: 8.6pt; }
+
+    .total-row td {
+      border-bottom: 0;
+      background: var(--orange-soft);
+      color: var(--navy-deep);
+      font-size: 14pt;
+      font-weight: 800;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+      margin-top: 6mm;
+    }
+
+    .payment {
+      min-height: 32mm;
+      padding: 4mm;
+      border: 1px solid var(--line);
+    }
+
+    .payment .percent { color: var(--orange); font-size: 20pt; font-weight: 800; }
+    .payment .amount { margin-top: 2mm; color: var(--navy-deep); font-weight: 800; }
+    .payment .trigger { margin-top: 2mm; color: var(--muted); font-size: 8.5pt; }
+
+    .terms {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm 8mm;
+      margin-top: 7mm;
+    }
+
+    .term {
+      padding-top: 4mm;
+      border-top: 2px solid var(--navy);
+    }
+
+    .term p { margin-top: 2mm; color: var(--muted); font-size: 9pt; }
+
+    .exclusions {
+      margin-top: 6mm;
+      padding: 5mm;
+      border: 1px solid #f0c7a8;
+      background: var(--orange-soft);
+    }
+
+    .signature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14mm;
+      margin-top: 14mm;
+    }
+
+    .signature {
+      padding-top: 11mm;
+      border-top: 1px solid var(--ink);
+    }
+
+    .signature strong { display: block; color: var(--navy-deep); }
+    .signature span { color: var(--muted); font-size: 8.5pt; }
+
+    .acceptance-box {
+      margin-top: 8mm;
+      padding: 6mm;
+      border: 2px solid var(--navy);
+      background: var(--wash);
+    }
+
+    .smallprint { margin-top: 6mm; color: var(--muted); font-size: 8.3pt; }
+
+    @media print {
+      html, body { background: white; }
+      .page { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="page cover">
+    <div class="cover-content">
+      <div class="brand-row">
+        <div class="logo-window"><img src="assets/vardexlabs-logo.png" alt="VardexLabs logo" /></div>
+        <div>
+          <div class="brand-name">VardexLabs</div>
+          <div class="brand-sub">Digital products · Web engineering</div>
+        </div>
+      </div>
+
+      <div class="cover-main">
+        <p class="eyebrow">Commercial Proposal</p>
+        <h1>Institutional Website Design & Development</h1>
+        <p class="lead">A modern, reliable and admission-focused digital platform for U40 Academy Inn.</p>
+      </div>
+
+      <div class="cover-meta">
+        <div><div class="meta-label">Prepared for</div><div class="meta-value">U40 Academy Inn</div></div>
+        <div><div class="meta-label">Prepared by</div><div class="meta-value">VardexLabs</div></div>
+        <div><div class="meta-label">Proposal value</div><div class="meta-value">₹24,500</div></div>
+        <div><div class="meta-label">Proposal date</div><div class="meta-value">02 August 2026</div></div>
+        <div><div class="meta-label">Validity</div><div class="meta-value">15 calendar days</div></div>
+        <div><div class="meta-label">Reference</div><div class="meta-value">VDX/U40/2026/08-01</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">01 · Executive summary</div>
+      <h2>A credible digital campus for students and guardians.</h2>
+      <p class="intro">VardexLabs proposes to design, develop and deploy a responsive institutional website for U40 Academy Inn. The website will communicate academic programs, residential facilities, student outcomes and admissions information through a clear, modern experience designed for mobile-first visitors.</p>
+
+      <div class="summary-grid">
+        <div class="summary-card accent"><div class="large">₹24,500</div><h3>Fixed project fee</h3><p>A defined commercial scope with milestone-based payments and no hidden development charges.</p></div>
+        <div class="summary-card"><div class="large">4–5 weeks</div><h3>Estimated delivery</h3><p>Subject to timely content, feedback and approvals from the client.</p></div>
+        <div class="summary-card"><div class="large">Responsive</div><h3>Designed for every screen</h3><p>Optimised for mobile phones, tablets, laptops and large desktop displays.</p></div>
+        <div class="summary-card"><div class="large">Full-stack</div><h3>Admissions-ready</h3><p>Online inquiry submission, secure cloud database and reference-based application tracking.</p></div>
+      </div>
+
+      <div class="statement">The objective is not only to publish information, but to establish institutional trust and create a practical admissions channel for prospective families.</div>
+
+      <div class="rule"></div>
+      <h3>Primary project objectives</h3>
+      <ul class="checklist">
+        <li>Present U40 Academy Inn as a credible residential science institution.</li>
+        <li>Make academic programs, hostel facilities and results easy to understand.</li>
+        <li>Provide one clear path from discovery to an admission inquiry.</li>
+        <li>Offer a reliable inquiry tracking experience for guardians.</li>
+        <li>Create a maintainable platform ready for future expansion.</li>
+      </ul>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>02</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">02 · Scope of work</div>
+      <h2>Complete website experience, from strategy to launch.</h2>
+      <p class="intro">The engagement covers the design and engineering required to deliver a production-ready institutional website—not a generic template or a static brochure page.</p>
+
+      <div class="scope-list">
+        <div class="scope-row"><div class="scope-index">01</div><div class="scope-title">Discovery & structure</div><div class="scope-copy">Business requirement review, target-audience mapping, navigation planning, page hierarchy and admissions journey definition.</div></div>
+        <div class="scope-row"><div class="scope-index">02</div><div class="scope-title">Visual identity</div><div class="scope-copy">Institutional colour system, typography, UI components, web-ready logo treatment and a consistent visual language.</div></div>
+        <div class="scope-row"><div class="scope-index">03</div><div class="scope-title">UX/UI design</div><div class="scope-copy">High-quality responsive layouts with clear hierarchy, accessible contrast, touch-friendly controls and focused calls to action.</div></div>
+        <div class="scope-row"><div class="scope-index">04</div><div class="scope-title">Frontend development</div><div class="scope-copy">Responsive React implementation covering header, hero, programs, campus life, results, admissions, location and footer.</div></div>
+        <div class="scope-row"><div class="scope-index">05</div><div class="scope-title">Admissions system</div><div class="scope-copy">Validated admission inquiry form, unique reference generation, secure database storage and application-status lookup.</div></div>
+        <div class="scope-row"><div class="scope-index">06</div><div class="scope-title">Cloud deployment</div><div class="scope-copy">Production build, Cloudflare Worker deployment, D1 database setup, asset delivery and baseline security configuration.</div></div>
+        <div class="scope-row"><div class="scope-index">07</div><div class="scope-title">QA & handover</div><div class="scope-copy">Responsive testing, browser checks, form workflow testing, production verification, documentation and one handover session.</div></div>
+      </div>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>03</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">03 · Deliverables</div>
+      <h2>What U40 Academy Inn will receive.</h2>
+
+      <div class="two-col">
+        <div class="panel">
+          <h3>Website sections</h3>
+          <ul>
+            <li>Responsive institutional header and navigation</li>
+            <li>Admission-focused hero presentation</li>
+            <li>About and educational model</li>
+            <li>Academic programs and pathways</li>
+            <li>Residential life and facilities</li>
+            <li>Results and student outcomes</li>
+            <li>Admissions process and inquiry form</li>
+            <li>Application-status tracking</li>
+            <li>Contact, location and campus visit CTA</li>
+            <li>Institutional footer and legal placeholders</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h3>Technical deliverables</h3>
+          <ul>
+            <li>Mobile-first responsive frontend</li>
+            <li>Form validation and user feedback states</li>
+            <li>Cloud-based admissions database</li>
+            <li>Unique inquiry reference codes</li>
+            <li>Secure phone-based tracking verification</li>
+            <li>SEO title and description metadata</li>
+            <li>Branded favicon and social metadata</li>
+            <li>Accessible keyboard focus and labels</li>
+            <li>Optimised production build</li>
+            <li>Cloudflare production deployment</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="rule"></div>
+      <h3>Proposed technology</h3>
+      <div class="tech-stack">
+        <div class="tech">React</div>
+        <div class="tech">TypeScript</div>
+        <div class="tech">Tailwind CSS</div>
+        <div class="tech">Cloudflare</div>
+        <div class="tech">Workers</div>
+        <div class="tech">D1 Database</div>
+        <div class="tech">tRPC API</div>
+        <div class="tech">Responsive UI</div>
+      </div>
+
+      <div class="statement">All project source files and production configuration will be handed over after receipt of the final payment.</div>
+
+      <div class="two-col">
+        <div><h3>Design revision allowance</h3><p class="smallprint">Two consolidated revision rounds are included during the design and content-review stage. Corrections within the agreed scope are included.</p></div>
+        <div><h3>Post-launch warranty</h3><p class="smallprint">Thirty calendar days of bug-fix support are included for defects relating to the agreed and delivered functionality.</p></div>
+      </div>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>04</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">04 · Delivery plan</div>
+      <h2>A focused four-to-five-week delivery process.</h2>
+      <p class="intro">The schedule begins after receipt of the advance payment and all essential content required for the first design cycle.</p>
+
+      <div class="timeline">
+        <div class="phase"><div class="week">Week 01</div><div class="phase-name">Discovery</div><div class="phase-copy">Requirements confirmation, content inventory, sitemap, admissions flow and project setup.</div></div>
+        <div class="phase"><div class="week">Week 01–02</div><div class="phase-name">Design system</div><div class="phase-copy">Visual direction, typography, colours, logo treatment, hero direction and key responsive layouts.</div></div>
+        <div class="phase"><div class="week">Week 02–03</div><div class="phase-name">Development</div><div class="phase-copy">Responsive frontend construction, content integration, interactions and component implementation.</div></div>
+        <div class="phase"><div class="week">Week 03–04</div><div class="phase-name">Admissions</div><div class="phase-copy">Inquiry form, database integration, unique references, tracking workflow and error handling.</div></div>
+        <div class="phase"><div class="week">Week 04</div><div class="phase-name">Review & QA</div><div class="phase-copy">Client review, approved corrections, device testing, browser testing and production readiness.</div></div>
+        <div class="phase"><div class="week">Week 04–05</div><div class="phase-name">Launch</div><div class="phase-copy">Cloud deployment, domain connection support, final verification, documentation and handover.</div></div>
+      </div>
+
+      <div class="dependency">
+        <h3>Client inputs required</h3>
+        <p>Final institutional text, verified result figures, program details, phone numbers, address, approved photographs, legal policy text and domain/DNS access where applicable.</p>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>VardexLabs responsibilities</h3>
+          <ul class="checklist">
+            <li>Project planning and implementation</li>
+            <li>Design and responsive development</li>
+            <li>Database and cloud configuration</li>
+            <li>Testing, launch and handover</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Client responsibilities</h3>
+          <ul class="checklist">
+            <li>Provide accurate, authorised content</li>
+            <li>Nominate one approval contact</li>
+            <li>Return consolidated feedback promptly</li>
+            <li>Provide domain and account access</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>05</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">05 · Commercial proposal</div>
+      <h2>Fixed project investment: ₹24,500</h2>
+      <p class="intro">The following pricing reflects the complete agreed scope from discovery through production deployment.</p>
+
+      <table>
+        <thead><tr><th>Work package</th><th>Investment</th></tr></thead>
+        <tbody>
+          <tr><td><div class="cost-title">Discovery & information architecture</div><div class="cost-detail">Requirements, sitemap, content structure and admissions journey</div></td><td>₹2,500</td></tr>
+          <tr><td><div class="cost-title">UI/UX design & brand integration</div><div class="cost-detail">Design system, responsive layouts, web logo adaptation and visual assets</div></td><td>₹4,500</td></tr>
+          <tr><td><div class="cost-title">Responsive frontend development</div><div class="cost-detail">React implementation across all agreed institutional sections</div></td><td>₹7,000</td></tr>
+          <tr><td><div class="cost-title">Admissions form, API & tracking system</div><div class="cost-detail">Validation, database, references, status lookup and feedback states</div></td><td>₹5,000</td></tr>
+          <tr><td><div class="cost-title">Cloud deployment, QA & security baseline</div><div class="cost-detail">Cloudflare Worker, D1 setup, testing and production verification</div></td><td>₹3,500</td></tr>
+          <tr><td><div class="cost-title">Handover, documentation & warranty</div><div class="cost-detail">Handover session, project notes and 30-day bug-fix period</div></td><td>₹2,000</td></tr>
+          <tr class="total-row"><td>Total project fee</td><td>₹24,500</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 10mm;">Payment milestones</h3>
+      <div class="payment-grid">
+        <div class="payment"><div class="percent">40%</div><div class="amount">₹9,800</div><div class="trigger">Advance payment to confirm the project and begin discovery.</div></div>
+        <div class="payment"><div class="percent">40%</div><div class="amount">₹9,800</div><div class="trigger">After design approval and delivery of the functional staging build.</div></div>
+        <div class="payment"><div class="percent">20%</div><div class="amount">₹4,900</div><div class="trigger">Before production launch, source handover and final access transfer.</div></div>
+      </div>
+
+      <p class="smallprint"><strong>Tax note:</strong> GST or other statutory taxes, if legally applicable to the invoice, will be charged separately. Third-party paid services are not included in the project fee.</p>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>06</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">06 · Terms & assumptions</div>
+      <h2>Clear responsibilities for a smooth delivery.</h2>
+
+      <div class="terms">
+        <div class="term"><h3>Proposal validity</h3><p>This commercial proposal remains valid for 15 calendar days from 02 August 2026. Scope and pricing may be reviewed after expiry.</p></div>
+        <div class="term"><h3>Project commencement</h3><p>Work begins after written approval, receipt of the 40% advance and availability of the essential client content.</p></div>
+        <div class="term"><h3>Feedback & approvals</h3><p>The client will provide consolidated feedback through one nominated representative. Delayed feedback may move delivery dates.</p></div>
+        <div class="term"><h3>Change requests</h3><p>Requirements outside the approved scope will be estimated separately and started only after written approval of cost and schedule.</p></div>
+        <div class="term"><h3>Intellectual property</h3><p>Upon full payment, the client receives ownership of the custom project source and final design deliverables, excluding third-party tools and licences.</p></div>
+        <div class="term"><h3>Warranty support</h3><p>The 30-day warranty covers reproducible defects in delivered scope. New features, new content and third-party changes are excluded.</p></div>
+        <div class="term"><h3>Hosting & domain</h3><p>Deployment configuration is included. Domain registration, renewal and any paid Cloudflare or third-party usage charges remain the client’s responsibility.</p></div>
+        <div class="term"><h3>Content responsibility</h3><p>The client is responsible for the accuracy, ownership and legal permission of all institutional claims, results, names, photos and policy content.</p></div>
+      </div>
+
+      <div class="exclusions">
+        <h3>Not included unless separately agreed</h3>
+        <ul class="checklist">
+          <li>Custom admin dashboard or staff login portal</li>
+          <li>Online fee payment gateway or accounting integration</li>
+          <li>Student learning management system, attendance or examination portal</li>
+          <li>Professional photography, video production or extensive copywriting</li>
+          <li>Bulk historical data entry, migration or document digitisation</li>
+          <li>Ongoing SEO campaigns, advertising, social media or maintenance retainers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>07</span></div>
+  </section>
+
+  <section class="page">
+    <div class="topbar"></div>
+    <div class="inner">
+      <div class="section-number">07 · Acceptance</div>
+      <h2>Approval to proceed.</h2>
+      <p class="intro">By signing below, both parties acknowledge the project scope, commercial value, payment milestones, assumptions and terms described in this proposal.</p>
+
+      <div class="acceptance-box">
+        <h3>Project confirmation</h3>
+        <p style="margin-top: 4mm;">U40 Academy Inn authorises VardexLabs to commence the Institutional Website Design & Development project at a fixed professional fee of <strong>₹24,500</strong>, subject to the terms of this proposal.</p>
+      </div>
+
+      <div class="signature-grid">
+        <div class="signature"><strong>For U40 Academy Inn</strong><span>Authorised name and signature</span></div>
+        <div class="signature"><strong>For VardexLabs</strong><span>Authorised name and signature</span></div>
+        <div class="signature"><strong>Date</strong><span>DD / MM / YYYY</span></div>
+        <div class="signature"><strong>Designation</strong><span>Authorised representative</span></div>
+      </div>
+
+      <div class="statement" style="margin-top: 22mm;">Thank you for the opportunity to support U40 Academy Inn’s digital presence. VardexLabs looks forward to building a platform that reflects the institution’s academic ambition and earns the confidence of students and guardians.</div>
+
+      <div class="rule"></div>
+      <p class="smallprint"><strong>Proposal reference:</strong> VDX/U40/2026/08-01 &nbsp; · &nbsp; <strong>Prepared:</strong> 02 August 2026 &nbsp; · &nbsp; <strong>Valid through:</strong> 17 August 2026</p>
+    </div>
+    <div class="footer"><span>VardexLabs · Confidential Commercial Proposal</span><span>08</span></div>
+  </section>
+
+</body>
+</html>

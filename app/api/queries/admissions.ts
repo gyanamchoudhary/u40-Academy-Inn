@@ -2,7 +2,7 @@ import { admissionInquiries } from "@db/schema";
 import type { AdmissionInquiryInput } from "@contracts/admissions";
 import type { Database } from "./connection";
 
-function generateReferenceCode() {
+export function generateReferenceCode() {
   const year = new Date().getFullYear();
   const bytes = new Uint8Array(4);
   crypto.getRandomValues(bytes);
@@ -18,6 +18,8 @@ export async function createAdmissionInquiry(
   db: Database,
   input: AdmissionInquiryInput,
 ) {
+  // Consent is collected from the user but not stored in the database.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { consent: _consent, ...details } = input;
   const referenceCode = generateReferenceCode();
 
