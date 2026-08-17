@@ -5,7 +5,8 @@ export const institute = {
   established: 2012,
   category: "Residential Science Coaching Institute & Boys’ Hostel",
   address:
-    "NH-12, Gabgachi, Jadupur, Behind TVS Amrith Path, Near PRM Centre, Malda, West Bengal 732103",
+    "NH34, Amrith Path, behind TVS, Malda, Dakshin Jadupur, West Bengal 732103",
+  mapUrl: "https://maps.app.goo.gl/65EQaogu7zC5BRSS7?g_st=iw",
   phones: ["+91 62966 17524", "+91 97752 89654", "+91 94341 66316"],
   website: "u40academy.com",
 };
