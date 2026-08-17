@@ -3,8 +3,19 @@
   "name": "u40-academy-inn",
   "account_id": "408f74ec91c62991098af4f5f8ab3e13",
   "main": "api/worker.ts",
+  "workers_dev": true,
   "compatibility_date": "2026-08-02",
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "u40academy.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.u40academy.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist/public",
     "binding": "ASSETS",
