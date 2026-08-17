@@ -12,15 +12,30 @@ function startHeader() {
 }
 
 if (path === '/' || path === '/index.html') {
-  // Zero-React homepage bootstrap: only the tiny header helper runs at startup.
-  // The below-the-fold React island is delayed until after the TBT window so
-  // the initial Lighthouse Performance score is not affected by React hydration.
+  // Zero-React homepage shell: Header + Hero are prerendered. The below-the-fold
+  // sections load on demand when the user scrolls toward them or clicks a
+  // section link, keeping the initial bundle tiny and TBT at zero.
   startHeader()
 
-  setTimeout(() => {
-    import('./home-bootstrap')
-  }, 5000)
-} else if (path === '/privacy' || path === '/terms') {
+  const restEl = document.getElementById('rest-island')
+  if (restEl && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          import('./home-bootstrap')
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' },
+    )
+    observer.observe(restEl)
+  }
+} else if (
+  path === '/privacy' ||
+  path === '/privacy/' ||
+  path === '/terms' ||
+  path === '/terms/'
+) {
   // Static legal pages: header mobile menu is the only client interactivity.
   startHeader()
 } else {

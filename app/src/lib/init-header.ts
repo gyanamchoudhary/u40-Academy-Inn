@@ -8,10 +8,14 @@ export function initHeader() {
 
   let open = false
   let touched = false
+  const forceScrolled = header.dataset.forceScrolled === 'true'
 
   const setScrolled = () => {
     if (open) return
-    header.setAttribute('data-header', window.scrollY > 12 ? 'scrolled' : 'top')
+    header.setAttribute(
+      'data-header',
+      forceScrolled || window.scrollY > 12 ? 'scrolled' : 'top'
+    )
   }
 
   const setMenu = (nextOpen: boolean) => {
@@ -51,6 +55,34 @@ export function initHeader() {
       document.body.classList.add('touch-device')
     }
   }, { once: true, passive: true })
+
+  // On the homepage, clicking a section link loads the below-the-fold island
+  // immediately so the anchor resolves even before the scroll-based lazy load.
+  const isHome =
+    window.location.pathname === '/' ||
+    window.location.pathname === '/index.html'
+  if (isHome) {
+    document.querySelectorAll('a[href^="/#"]').forEach((link) => {
+      link.addEventListener('click', async (event) => {
+        const href = link.getAttribute('href')
+        if (!href) return
+        const hash = href.slice(1) // strip leading "/"
+        const targetId = hash.slice(1)
+
+        event.preventDefault()
+        if (!document.getElementById(targetId)) {
+          await import('../home-bootstrap')
+        }
+        requestAnimationFrame(() => {
+          const target = document.getElementById(targetId)
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' })
+            history.replaceState(null, '', hash)
+          }
+        })
+      })
+    })
+  }
 
   window.addEventListener('scroll', setScrolled, { passive: true })
   setScrolled()

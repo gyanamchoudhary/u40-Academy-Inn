@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "u40-academy-inn",
+  "account_id": "408f74ec91c62991098af4f5f8ab3e13",
   "main": "api/worker.ts",
   "compatibility_date": "2026-08-02",
   "compatibility_flags": ["nodejs_compat"],
@@ -14,7 +15,7 @@
     {
       "binding": "DB",
       "database_name": "u40-admissions",
-      "database_id": "86fe97ac-eaf9-4b1f-842c-a9167898e2cf",
+      "database_id": "de66b6ed-bfbc-4c54-a213-304e63406474",
       "migrations_dir": "db/migrations"
     }
   ]
