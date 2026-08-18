@@ -4,7 +4,7 @@ import {
   BOARD_OPTIONS,
   CLASS_OPTIONS,
   COURSE_OPTIONS,
-  type AdmissionInquiryInput,
+  admissionInquirySchema,
   type AdmissionInquiryConfirmation,
 } from "@contracts/admissions";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,8 @@ type FormState = {
   message: string;
   consent: boolean;
 };
+
+type FieldErrors = Partial<Record<keyof FormState, string>>;
 
 const initialForm: FormState = {
   studentName: "",
@@ -69,27 +71,47 @@ function FieldLabel({
   );
 }
 
+function FieldError({
+  field,
+  message,
+}: {
+  field: keyof FormState;
+  message?: string;
+}) {
+  if (!message) return null;
+
+  return (
+    <p
+      id={`${field}-error`}
+      className="text-sm font-semibold leading-5 text-red-700"
+    >
+      {message}
+    </p>
+  );
+}
+
 export function ApplicationForm() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [submitted, setSubmitted] =
     useState<AdmissionInquiryConfirmation | null>(null);
-  const [consentError, setConsentError] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const submitInquiry = trpc.admission.submit.useMutation();
 
   const update = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setForm(current => ({ ...current, [field]: value }));
-    if (field === "consent" && value === true) setConsentError(false);
+    setFieldErrors(current => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+    if (submitInquiry.error) submitInquiry.reset();
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!form.consent) {
-      setConsentError(true);
-      return;
-    }
-
-    const payload: AdmissionInquiryInput = {
+    const payload = {
       ...form,
       phone: form.phone.trim(),
       email: form.email.trim(),
@@ -98,10 +120,34 @@ export function ApplicationForm() {
       message: form.message.trim(),
     };
 
-    submitInquiry.mutate(payload, {
+    const validation = admissionInquirySchema.safeParse(payload);
+
+    if (!validation.success) {
+      const nextErrors: FieldErrors = {};
+
+      for (const issue of validation.error.issues) {
+        const field = issue.path[0] as keyof FormState | undefined;
+        if (field && !nextErrors[field]) nextErrors[field] = issue.message;
+      }
+
+      setFieldErrors(nextErrors);
+      submitInquiry.reset();
+
+      const firstField = validation.error.issues[0]?.path[0];
+      if (typeof firstField === "string") {
+        requestAnimationFrame(() =>
+          document.getElementById(firstField)?.focus()
+        );
+      }
+      return;
+    }
+
+    setFieldErrors({});
+    submitInquiry.mutate(validation.data, {
       onSuccess: result => {
         setSubmitted(result);
         setForm(initialForm);
+        setFieldErrors({});
       },
     });
   };
@@ -160,6 +206,7 @@ export function ApplicationForm() {
   return (
     <form
       onSubmit={handleSubmit}
+      noValidate
       className="admission-form border border-black/15 bg-white p-5 sm:p-8"
     >
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
@@ -176,6 +223,20 @@ export function ApplicationForm() {
         </span>
       </div>
 
+      {Object.keys(fieldErrors).length > 0 ? (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="mt-6 border border-red-300 bg-red-50 px-5 py-4 text-red-900"
+        >
+          <p className="font-bold">Please check the highlighted details.</p>
+          <p className="mt-1 text-sm leading-6">
+            We have not sent the inquiry yet. Each highlighted field explains
+            what to fix.
+          </p>
+        </div>
+      ) : null}
+
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <FieldLabel htmlFor="studentName" required>
@@ -189,7 +250,12 @@ export function ApplicationForm() {
             required
             autoComplete="name"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.studentName)}
+            aria-describedby={
+              fieldErrors.studentName ? "studentName-error" : undefined
+            }
           />
+          <FieldError field="studentName" message={fieldErrors.studentName} />
         </div>
         <div className="space-y-2">
           <FieldLabel htmlFor="guardianName" required>
@@ -203,7 +269,12 @@ export function ApplicationForm() {
             required
             autoComplete="name"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.guardianName)}
+            aria-describedby={
+              fieldErrors.guardianName ? "guardianName-error" : undefined
+            }
           />
+          <FieldError field="guardianName" message={fieldErrors.guardianName} />
         </div>
         <div className="space-y-2">
           <FieldLabel htmlFor="phone" required>
@@ -218,7 +289,10 @@ export function ApplicationForm() {
             inputMode="tel"
             autoComplete="tel"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.phone)}
+            aria-describedby={fieldErrors.phone ? "phone-error" : undefined}
           />
+          <FieldError field="phone" message={fieldErrors.phone} />
         </div>
         <div className="space-y-2">
           <FieldLabel htmlFor="email">Email address</FieldLabel>
@@ -230,7 +304,10 @@ export function ApplicationForm() {
             placeholder="student@example.com"
             autoComplete="email"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.email)}
+            aria-describedby={fieldErrors.email ? "email-error" : undefined}
           />
+          <FieldError field="email" message={fieldErrors.email} />
         </div>
         <div className="space-y-2">
           <FieldLabel htmlFor="dateOfBirth">Date of birth</FieldLabel>
@@ -241,7 +318,12 @@ export function ApplicationForm() {
             onChange={event => update("dateOfBirth", event.target.value)}
             autoComplete="bday"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.dateOfBirth)}
+            aria-describedby={
+              fieldErrors.dateOfBirth ? "dateOfBirth-error" : undefined
+            }
           />
+          <FieldError field="dateOfBirth" message={fieldErrors.dateOfBirth} />
         </div>
         <div className="space-y-2">
           <FieldLabel htmlFor="currentClass" required>
@@ -329,6 +411,16 @@ export function ApplicationForm() {
             placeholder="Example: 85%"
             inputMode="decimal"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.previousPercentage)}
+            aria-describedby={
+              fieldErrors.previousPercentage
+                ? "previousPercentage-error"
+                : undefined
+            }
+          />
+          <FieldError
+            field="previousPercentage"
+            message={fieldErrors.previousPercentage}
           />
         </div>
         <div className="space-y-2 sm:col-span-2">
@@ -340,7 +432,12 @@ export function ApplicationForm() {
             placeholder="Last attended school"
             autoComplete="organization"
             className="h-12 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.schoolName)}
+            aria-describedby={
+              fieldErrors.schoolName ? "schoolName-error" : undefined
+            }
           />
+          <FieldError field="schoolName" message={fieldErrors.schoolName} />
         </div>
         <div className="space-y-2 sm:col-span-2">
           <FieldLabel htmlFor="address" required>
@@ -352,9 +449,13 @@ export function ApplicationForm() {
             onChange={event => update("address", event.target.value)}
             placeholder="Village / town, post office, district, state and PIN"
             required
+            minLength={10}
             autoComplete="street-address"
             className="min-h-24 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.address)}
+            aria-describedby={fieldErrors.address ? "address-error" : undefined}
           />
+          <FieldError field="address" message={fieldErrors.address} />
         </div>
         <div className="space-y-2 sm:col-span-2">
           <FieldLabel htmlFor="message">
@@ -366,7 +467,10 @@ export function ApplicationForm() {
             onChange={event => update("message", event.target.value)}
             placeholder="Tell us about the student’s goals, preferred session or scholarship needs."
             className="min-h-24 border-slate-200 bg-white"
+            aria-invalid={Boolean(fieldErrors.message)}
+            aria-describedby={fieldErrors.message ? "message-error" : undefined}
           />
+          <FieldError field="message" message={fieldErrors.message} />
         </div>
       </div>
 
@@ -379,8 +483,8 @@ export function ApplicationForm() {
           checked={form.consent}
           onCheckedChange={checked => update("consent", checked === true)}
           className="mt-1"
-          aria-invalid={consentError}
-          aria-describedby={consentError ? "consent-error" : undefined}
+          aria-invalid={Boolean(fieldErrors.consent)}
+          aria-describedby={fieldErrors.consent ? "consent-error" : undefined}
         />
         <span>
           I consent to U40 Academy Inn contacting me about this admission
@@ -389,13 +493,13 @@ export function ApplicationForm() {
         </span>
       </label>
 
-      {consentError ? (
+      {fieldErrors.consent ? (
         <p
           id="consent-error"
           className="mt-2 text-sm font-bold text-red-600"
           role="alert"
         >
-          Please confirm consent before submitting.
+          {fieldErrors.consent}
         </p>
       ) : null}
 
@@ -405,7 +509,11 @@ export function ApplicationForm() {
           aria-live="assertive"
           className="mt-5 rounded-md border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700"
         >
-          {submitInquiry.error.message}
+          <p className="font-bold">We could not send your inquiry.</p>
+          <p className="mt-1 font-normal leading-6">
+            Check your internet connection and try again. If the problem
+            continues, call admissions at +91 62966 17524.
+          </p>
         </div>
       ) : null}
 
