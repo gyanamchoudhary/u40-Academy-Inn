@@ -30,4 +30,11 @@
       "migrations_dir": "db/migrations",
     },
   ],
+  "send_email": [
+    {
+      "name": "ADMISSIONS_EMAIL",
+      "destination_address": "contact@vardex.in",
+      "remote": true,
+    },
+  ],
 }

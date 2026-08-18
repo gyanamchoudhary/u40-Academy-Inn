@@ -6,9 +6,7 @@ export function generateReferenceCode() {
   const year = new Date().getFullYear();
   const bytes = new Uint8Array(4);
   crypto.getRandomValues(bytes);
-  const suffix = Array.from(bytes, (b) =>
-    b.toString(16).padStart(2, "0"),
-  )
+  const suffix = Array.from(bytes, b => b.toString(16).padStart(2, "0"))
     .join("")
     .toUpperCase();
   return `U40-${year}-${suffix}`;
@@ -16,7 +14,7 @@ export function generateReferenceCode() {
 
 export async function createAdmissionInquiry(
   db: Database,
-  input: AdmissionInquiryInput,
+  input: AdmissionInquiryInput
 ) {
   // Consent is collected from the user but not stored in the database.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,6 +34,7 @@ export async function createAdmissionInquiry(
   }
 
   return {
+    referenceCode: inquiry.referenceCode,
     studentName: inquiry.studentName,
     courseInterested: inquiry.courseInterested,
   };
