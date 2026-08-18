@@ -15,11 +15,11 @@ export function Header({ forceScrolled = false }: { forceScrolled?: boolean }) {
 
   return (
     <header data-header={scrolled || open ? "scrolled" : "top"} data-force-scrolled={forceScrolled ? "true" : undefined} className="fixed inset-x-0 top-0 z-50 border-b transition duration-300">
-      <a href="#main-content" className="absolute left-4 top-3 -translate-y-20 bg-[#111318] px-4 py-2 text-sm font-bold text-white transition focus:translate-y-0">Skip to content</a>
-      <div className="mx-auto flex h-20 max-w-[90rem] items-center justify-between px-5 sm:px-8 lg:px-10">
-        <a href="/" className="flex items-center gap-3">
-          <img src="/assets/u40-mark.svg" alt="" className="h-11 w-11" width="44" height="44" />
-          <span>
+      <a href="#main-content" className="absolute left-4 top-3 inline-flex min-h-11 -translate-y-20 items-center bg-[#111318] px-4 py-2 text-sm font-bold text-white transition focus:translate-y-0">Skip to content</a>
+      <div className="mx-auto flex h-20 max-w-[90rem] items-center justify-between gap-3 px-5 sm:px-8 lg:px-10">
+        <a href="/" className="flex min-w-0 items-center gap-3">
+          <img src="/assets/u40-mark.svg" alt="" className="h-11 w-11 shrink-0" width="44" height="44" />
+          <span className="min-w-0">
             <span className="header-title block text-[15px] font-extrabold leading-none tracking-[-0.02em] transition-colors">U40 Academy Inn</span>
             <span className="header-subtitle mt-1.5 block font-mono text-[10px] font-medium uppercase tracking-[0.18em] transition-colors">Residential science institute</span>
           </span>
@@ -35,16 +35,16 @@ export function Header({ forceScrolled = false }: { forceScrolled?: boolean }) {
           Apply now <ArrowUpRight className="h-4 w-4" strokeWidth={1.8} />
         </a>
 
-        <button type="button" onClick={() => setOpen((value) => !value)} className="header-menu-btn grid h-11 w-11 cursor-pointer place-items-center border transition lg:hidden" aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>
+        <button type="button" onClick={() => setOpen((value) => !value)} className="header-menu-btn grid h-11 w-11 shrink-0 cursor-pointer place-items-center border transition active:scale-95 lg:hidden" aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      <div id="mobile-menu" className={open ? "grid overflow-hidden bg-[#f7f6f2] transition-[grid-template-rows] duration-200 lg:hidden grid-rows-[1fr] border-t border-black/10" : "grid overflow-hidden bg-[#f7f6f2] transition-[grid-template-rows] duration-200 lg:hidden grid-rows-[0fr]"}>
-        <div className="min-h-0">
+      <div id="mobile-menu" aria-hidden={!open} inert={!open} className={open ? "grid overflow-hidden bg-[#f7f6f2] transition-[grid-template-rows] duration-200 lg:hidden grid-rows-[1fr] border-t border-black/10" : "grid overflow-hidden bg-[#f7f6f2] transition-[grid-template-rows] duration-200 lg:hidden grid-rows-[0fr]"}>
+        <div className="min-h-0 max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain">
           <nav className="px-5 py-4" aria-label="Mobile navigation">
             {navItems.map((item) => (
-              <a key={item.href} href={`/${item.href}`} onClick={() => setOpen(false)} className="flex min-h-12 items-center justify-between border-b border-black/10 text-base font-semibold text-[#111318]">
+              <a key={item.href} href={`/${item.href}`} onClick={() => setOpen(false)} className="flex min-h-12 items-center justify-between border-b border-black/10 text-base font-semibold text-[#111318] active:bg-black/5">
                 {item.label}<ArrowUpRight className="h-4 w-4 text-[#2046d8]" />
               </a>
             ))}

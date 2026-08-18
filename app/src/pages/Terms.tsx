@@ -5,11 +5,11 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#f7f4ed] text-[#102235]">
       <Header forceScrolled />
-      <main id="main-content" className="mx-auto max-w-[90rem] px-5 py-32 sm:px-8 lg:px-10">
-        <h1 className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">Terms of Service</h1>
+      <main id="main-content" className="mx-auto max-w-[90rem] px-5 pb-20 pt-28 sm:px-8 sm:py-32 lg:px-10">
+        <h1 className="text-[2.75rem] font-semibold tracking-[-0.04em] sm:text-5xl">Terms of Service</h1>
         <p className="mt-4 text-[#60646c]">Last updated: {new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })}</p>
 
-        <section className="mt-12 max-w-3xl space-y-6 text-base leading-7 text-[#33373f]">
+        <section className="mt-10 max-w-3xl space-y-6 text-base leading-7 text-[#33373f] sm:mt-12">
           <p>
             By using the U40 Academy Inn website, you agree to these terms. If you do not agree, please do not use the site.
           </p>

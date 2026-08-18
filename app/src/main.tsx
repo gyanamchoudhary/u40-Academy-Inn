@@ -34,7 +34,7 @@ if (!hasPrerenderedPage) {
           observer.disconnect()
         }
       },
-      { rootMargin: '200px' },
+      { rootMargin: '0px' },
     )
     observer.observe(restEl)
   }

@@ -3,12 +3,12 @@ import { institute } from "@/data/institute";
 
 export function Contact() {
   return (
-    <section id="contact" className="bg-[#2046d8] py-24 text-white sm:py-28">
+    <section id="contact" className="bg-[#2046d8] py-20 text-white sm:py-28">
       <div className="mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-10">
         <div className="page-grid gap-y-12">
           <div className="col-span-12 lg:col-span-7">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#d9f66f]">Visit U40 Academy Inn</p>
-            <h2 className="mt-5 max-w-[18ch] text-5xl font-semibold leading-[0.96] tracking-[-0.055em] sm:text-6xl lg:text-7xl">See the campus. Meet the people.</h2>
+            <h2 className="mt-5 max-w-[18ch] text-[2.75rem] font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl lg:text-7xl">See the campus. Meet the people.</h2>
           </div>
           <div className="col-span-12 flex flex-col justify-end lg:col-span-5">
             <div className="flex gap-4 border-t border-white/25 pt-6"><MapPin className="mt-1 h-5 w-5 shrink-0 text-[#d9f66f]" /><p className="max-w-md text-base leading-7 text-white/75">{institute.address}</p></div>

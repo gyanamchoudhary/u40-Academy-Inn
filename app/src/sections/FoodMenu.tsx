@@ -123,7 +123,7 @@ export function FoodMenu() {
   return (
     <section
       id="food-menu"
-      className="relative overflow-hidden bg-[#f7f4ed] py-24 text-[#111318] sm:py-32"
+      className="relative overflow-hidden bg-[#f7f4ed] py-20 text-[#111318] sm:py-28 lg:py-32"
     >
       <div
         className="pointer-events-none absolute inset-0 rule-grid opacity-30"
@@ -131,13 +131,13 @@ export function FoodMenu() {
       />
 
       <div className="relative mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-10">
-        <header className="page-grid items-end gap-y-10 border-b border-black/15 pb-12">
+        <header className="page-grid items-end gap-y-8 border-b border-black/15 pb-10 sm:gap-y-10 sm:pb-12">
           <div className="col-span-12 lg:col-span-8">
             <div className="mb-6 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#2046d8]">
               <Leaf className="h-4 w-4" strokeWidth={1.8} />
               Hostel dining · Daily care
             </div>
-            <h2 className="max-w-5xl text-[clamp(3rem,6.5vw,6.6rem)] font-extrabold leading-[0.9] tracking-[-0.07em] text-balance">
+            <h2 className="max-w-5xl text-balance text-[clamp(2.65rem,13.5vw,3.5rem)] font-extrabold leading-[0.92] tracking-[-0.04em] sm:text-[clamp(3.5rem,6.5vw,6rem)]">
               Four moments of care,
               <span className="block text-[#2046d8]">
                 from breakfast to lights-out.
@@ -165,29 +165,20 @@ export function FoodMenu() {
           </div>
         </header>
 
-        <div className="page-grid gap-y-5 pt-12 lg:pt-16">
-          <div className="col-span-12 grid min-h-[46rem] gap-3 sm:grid-cols-2 sm:grid-rows-[1fr_15rem] lg:col-span-7">
-            <figure className="relative min-h-[29rem] overflow-hidden bg-[#111318] sm:col-span-2">
-              {mealTimes.map((meal, index) => {
-                const isActive = index === activeMealIndex;
-
-                return (
-                  <OptimizedImage
-                    key={meal.title}
-                    src={meal.image}
-                    alt={isActive ? meal.imageAlt : ""}
-                    aria-hidden={!isActive}
-                    className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-out ${
-                      isActive
-                        ? "scale-100 opacity-100"
-                        : "pointer-events-none scale-[1.025] opacity-0"
-                    }`}
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 1024px) 100vw, 58vw"
-                  />
-                );
-              })}
+        <div className="page-grid gap-y-5 pt-10 sm:pt-12 lg:pt-16">
+          <div className="col-span-12 grid grid-cols-2 gap-3 sm:min-h-[46rem] sm:grid-rows-[1fr_15rem] lg:col-span-7">
+            <figure className="relative col-span-2 min-h-[26rem] overflow-hidden bg-[#111318] sm:min-h-[29rem]">
+              <OptimizedImage
+                key={activeMeal.image}
+                src={activeMeal.image}
+                alt={activeMeal.imageAlt}
+                className="campus-image-reveal absolute inset-0 h-full w-full object-cover"
+                width={1536}
+                height={1024}
+                loading="eager"
+                fetchPriority="low"
+                sizes="(max-width: 1024px) 100vw, 58vw"
+              />
               <div
                 className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10"
                 aria-hidden="true"
@@ -213,8 +204,7 @@ export function FoodMenu() {
             <button
               type="button"
               onClick={() => setActiveMealIndex(nextMealIndex)}
-              className="group relative min-h-[15rem] overflow-hidden bg-[#3a251a] text-left"
-              aria-label={`Show ${nextMeal.title} menu`}
+              className="group relative min-h-[13rem] overflow-hidden bg-[#3a251a] text-left sm:min-h-[15rem]"
             >
               <OptimizedImage
                 key={nextMeal.image}
@@ -223,13 +213,13 @@ export function FoodMenu() {
                 className="campus-image-reveal absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.025]"
                 width={1536}
                 height={1024}
-                sizes="(max-width: 640px) 100vw, 30vw"
+                sizes="(max-width: 640px) 50vw, 30vw"
               />
               <div
                 className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"
                 aria-hidden="true"
               />
-              <span className="absolute inset-x-0 bottom-0 p-5 text-white">
+              <span className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
                 <span className="font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-[#d9f66f]">
                   Up next · {nextMeal.time}
                 </span>
@@ -242,34 +232,34 @@ export function FoodMenu() {
                     View →
                   </span>
                 </span>
-                <p className="mt-1 text-sm text-white/70">
+                <p className="mt-1 hidden text-sm text-white/70 min-[420px]:block">
                   {nextMeal.imageCaption}
                 </p>
               </span>
             </button>
 
-            <aside className="flex min-h-[15rem] flex-col justify-between bg-[#2046d8] p-6 text-white sm:p-7">
+            <aside className="flex min-h-[13rem] flex-col justify-between bg-[#2046d8] p-4 text-white sm:min-h-[15rem] sm:p-7">
               <Soup className="h-7 w-7 text-[#d9f66f]" strokeWidth={1.6} />
               <blockquote
                 key={activeMeal.careLine}
-                className="campus-copy-reveal mt-8 text-2xl font-extrabold leading-tight tracking-[-0.035em]"
+                className="campus-copy-reveal mt-6 text-lg font-extrabold leading-tight tracking-[-0.03em] min-[420px]:text-xl sm:mt-8 sm:text-2xl"
               >
                 “{activeMeal.careLine}”
               </blockquote>
-              <p className="mt-4 text-xs leading-5 text-white/65">
+              <p className="mt-4 hidden text-xs leading-5 text-white/70 sm:block">
                 A predictable meal rhythm helps students move through a long
                 residential day with confidence.
               </p>
             </aside>
           </div>
 
-          <aside className="col-span-12 flex flex-col bg-[#111318] p-6 text-white sm:p-8 lg:col-span-5 lg:p-10">
+          <aside className="col-span-12 flex flex-col bg-[#111318] p-5 text-white sm:p-8 lg:col-span-5 lg:p-10">
             <div className="flex items-start justify-between gap-5 border-b border-white/15 pb-7">
               <div>
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#d9f66f]">
                   A student’s food day
                 </p>
-                <h3 className="mt-3 text-3xl font-extrabold tracking-[-0.04em]">
+                <h3 className="mt-3 text-2xl font-extrabold tracking-[-0.04em] sm:text-3xl">
                   A steady rhythm from morning to night.
                 </h3>
               </div>
@@ -313,7 +303,7 @@ export function FoodMenu() {
                     }}
                     onFocus={() => setActiveMealIndex(index)}
                     aria-pressed={index === activeMealIndex}
-                    className={`group grid w-full grid-cols-[3rem_1fr] gap-4 px-3 py-6 text-left transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#d9f66f] ${
+                    className={`group grid w-full grid-cols-[3rem_1fr] gap-3 px-2 py-5 text-left transition duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#d9f66f] sm:gap-4 sm:px-3 sm:py-6 ${
                       index === activeMealIndex
                         ? "bg-white/[0.06]"
                         : "hover:bg-white/[0.035]"
@@ -338,7 +328,7 @@ export function FoodMenu() {
                             {meal.title}
                           </span>
                         </span>
-                        <span className="font-mono text-[9px] font-semibold text-white/30">
+                        <span className="font-mono text-[9px] font-semibold text-white/65">
                           0{index + 1}/04
                         </span>
                       </span>
@@ -408,7 +398,7 @@ export function FoodMenu() {
           </aside>
         </div>
 
-        <div className="mt-16 border-y border-black/15">
+        <div className="mt-12 border-y border-black/15 sm:mt-16">
           <div className="page-grid gap-y-8 py-10 sm:py-12">
             <div className="col-span-12 lg:col-span-4">
               <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[#2046d8]">

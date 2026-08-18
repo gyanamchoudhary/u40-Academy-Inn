@@ -22,6 +22,8 @@ export function initHeader() {
     open = nextOpen
     toggle.setAttribute('aria-expanded', String(open))
     toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu')
+    menu.setAttribute('aria-hidden', String(!open))
+    menu.toggleAttribute('inert', !open)
     if (open) {
       header.setAttribute('data-header', 'open')
       menu.classList.add('border-t', 'border-black/10')
@@ -34,6 +36,13 @@ export function initHeader() {
   }
 
   toggle.addEventListener('click', () => setMenu(!open))
+
+  document.addEventListener('keydown', (event) => {
+    if (open && event.key === 'Escape') {
+      setMenu(false)
+      toggle.focus()
+    }
+  })
 
   menu.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => setMenu(false))

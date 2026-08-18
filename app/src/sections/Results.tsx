@@ -4,11 +4,11 @@ import { resultCards } from "@/data/institute";
 
 export function Results() {
   return (
-    <section id="results" className="bg-white py-24 sm:py-32">
+    <section id="results" className="bg-white py-20 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[90rem] px-5 sm:px-8 lg:px-10">
         <SectionHeading eyebrow="Outcomes" title="Results measured over years, not a single campaign." description="Since 2012, the academy has maintained consistent Higher Secondary outcomes while helping students progress into medical, engineering and other scientific fields." />
 
-        <div className="mt-16 grid border-y border-black/15 sm:grid-cols-3">
+        <div className="mt-12 grid border-y border-black/15 sm:mt-16 sm:grid-cols-3">
           {[
             ["589", "Students admitted to Class XI", "2012–2025"],
             ["100%", "Higher Secondary pass rate", "Across all completed batches"],
@@ -22,11 +22,11 @@ export function Results() {
           ))}
         </div>
 
-        <div className="mt-20 grid gap-12 bg-[#eef1ff] p-7 sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:p-14">
+        <div className="mt-14 grid gap-10 bg-[#eef1ff] p-6 sm:mt-20 sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12 lg:p-14">
           <div>
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2046d8]">NEET · 2025</p>
-            <h3 className="mt-5 text-4xl font-semibold leading-tight tracking-[-0.045em]">Three students. Three medical college journeys.</h3>
-            <a href="#admissions" className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-[#2046d8]">Begin your application <ArrowRight className="h-4 w-4" /></a>
+            <h3 className="mt-5 text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl">Three students. Three medical college journeys.</h3>
+            <a href="#admissions" className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-bold text-[#2046d8] sm:mt-8">Begin your application <ArrowRight className="h-4 w-4" /></a>
           </div>
           <div className="border-t border-black/15">
             {resultCards.map((student) => (

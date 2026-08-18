@@ -3,7 +3,7 @@ import { institute, navItems } from "@/data/institute";
 
 export function Footer() {
   return (
-    <footer className="bg-[#111318] text-white">
+    <footer className="bg-[#111318] pb-[env(safe-area-inset-bottom)] text-white">
       <div className="mx-auto max-w-[90rem] px-5 py-12 sm:px-8 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
           <div>
@@ -30,7 +30,7 @@ export function Footer() {
               <a
                 key={item.href}
                 href={`/${item.href}`}
-                className="text-sm font-medium text-white/65 transition hover:text-white"
+                className="inline-flex min-h-11 items-center text-sm font-medium text-white/70 transition hover:text-white"
               >
                 {item.label}
               </a>
@@ -41,17 +41,17 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {institute.name}. All rights reserved.
           </p>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
             <a
               href="#main-content"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-white"
+              className="inline-flex min-h-11 items-center gap-2 text-white/70 hover:text-white"
             >
               Back to top <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
-            <a href="/privacy/" className="hover:text-white">
+            <a href="/privacy/" className="-mx-2 inline-flex min-h-11 items-center px-2 hover:text-white">
               Privacy
             </a>
-            <a href="/terms/" className="hover:text-white">
+            <a href="/terms/" className="-mx-2 inline-flex min-h-11 items-center px-2 hover:text-white">
               Terms
             </a>
           </div>

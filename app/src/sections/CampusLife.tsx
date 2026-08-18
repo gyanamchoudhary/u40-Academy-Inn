@@ -80,34 +80,23 @@ export function CampusLife() {
   return (
     <section
       id="hostel"
-      className="relative h-[calc(100dvh-5rem)] min-h-[36rem] overflow-hidden bg-[#071a2d] text-white"
+      className="relative min-h-[50rem] overflow-hidden bg-[#071a2d] text-white sm:h-[calc(100dvh-5rem)] sm:min-h-[42rem]"
     >
       <span id="facilities" className="absolute top-0" aria-hidden="true" />
 
-      {moments.map((moment, index) => {
-        const isActive = activeMoment === index;
-
-        return (
-          <OptimizedImage
-            key={moment.image}
-            src={moment.image}
-            alt={isActive ? moment.alt : ""}
-            aria-hidden={!isActive}
-            className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-out ${moment.position} ${
-              isActive
-                ? "scale-100 opacity-100"
-                : "pointer-events-none scale-[1.025] opacity-0"
-            }`}
-            width={1536}
-            height={1024}
-            loading={index === 0 ? "eager" : "lazy"}
-            fetchPriority={index === 0 ? "high" : "low"}
-            sizes="100vw"
-          />
-        );
-      })}
+      <OptimizedImage
+        key={active.image}
+        src={active.image}
+        alt={active.alt}
+        className={`campus-image-reveal absolute inset-0 h-full w-full object-cover ${active.position}`}
+        width={1536}
+        height={1024}
+        loading="eager"
+        fetchPriority="low"
+        sizes="100vw"
+      />
       <div
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,18,33,.96)_0%,rgba(5,18,33,.78)_45%,rgba(5,18,33,.18)_78%,rgba(5,18,33,.08)_100%)]"
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,18,33,.9)_0%,rgba(5,18,33,.68)_48%,rgba(5,18,33,.28)_100%)] md:bg-[linear-gradient(90deg,rgba(5,18,33,.96)_0%,rgba(5,18,33,.78)_45%,rgba(5,18,33,.18)_78%,rgba(5,18,33,.08)_100%)]"
         aria-hidden="true"
       />
       <div
@@ -115,8 +104,8 @@ export function CampusLife() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex h-full max-w-[90rem] flex-col px-5 sm:px-8 lg:px-10">
-        <div className="flex min-h-0 flex-1 items-center py-6 sm:py-8">
+      <div className="relative mx-auto flex min-h-[50rem] max-w-[90rem] flex-col px-5 sm:h-full sm:min-h-0 sm:px-8 lg:px-10">
+        <div className="flex min-h-0 flex-1 items-start py-8 sm:items-center sm:py-8">
           <div className="max-w-[50rem]">
             <div className="flex items-center justify-between gap-5 sm:justify-start">
               <p className="flex items-center gap-3 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d9f66f]">
@@ -126,7 +115,7 @@ export function CampusLife() {
               <button
                 type="button"
                 onClick={() => setIsPaused(current => !current)}
-                className="inline-flex min-h-9 cursor-pointer items-center gap-2 border border-white/25 bg-black/15 px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white/70 backdrop-blur-sm transition hover:border-[#d9f66f] hover:text-[#d9f66f]"
+                className="inline-flex min-h-11 cursor-pointer items-center gap-2 border border-white/25 bg-black/15 px-3 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white/80 backdrop-blur-sm transition hover:border-[#d9f66f] hover:text-[#d9f66f] active:bg-white/10"
                 aria-label={
                   isPaused
                     ? "Resume automatic campus-life slideshow"
@@ -142,7 +131,7 @@ export function CampusLife() {
               </button>
             </div>
 
-            <h2 className="mt-5 max-w-[20ch] text-[clamp(3.3rem,6.2vw,6.8rem)] font-semibold leading-[0.86] tracking-[-0.065em]">
+            <h2 className="mt-5 max-w-[20ch] text-[clamp(2.8rem,13vw,3.5rem)] font-semibold leading-[0.92] tracking-[-0.04em] sm:text-[clamp(3.5rem,6.2vw,6rem)]">
               From first light to{" "}
               <span className="text-[#d9f66f]">lights out.</span>
             </h2>
@@ -164,11 +153,11 @@ export function CampusLife() {
               </p>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 sm:flex sm:flex-wrap sm:items-center sm:gap-x-5">
               {essentials.map(item => (
                 <span
                   key={item}
-                  className="flex items-center gap-2 text-[11px] font-semibold text-white/55"
+                  className="flex items-center gap-2 text-[11px] font-semibold text-white/70"
                 >
                   <span className="h-1 w-1 bg-[#d9f66f]" />
                   {item}
@@ -176,7 +165,7 @@ export function CampusLife() {
               ))}
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-2 text-[11px] font-bold text-[#d9f66f] transition hover:text-white"
+                className="group inline-flex min-h-11 items-center gap-2 text-[11px] font-bold text-[#d9f66f] transition hover:text-white"
               >
                 Plan a visit{" "}
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -186,7 +175,7 @@ export function CampusLife() {
         </div>
 
         <div
-          className="grid shrink-0 border-x border-t border-white/20 bg-[#081a2b]/82 backdrop-blur-md sm:grid-cols-2 lg:grid-cols-4"
+          className="mobile-snap-row -mx-5 grid shrink-0 snap-x snap-mandatory grid-flow-col auto-cols-[76%] overflow-x-auto border-t border-white/20 bg-[#081a2b]/88 px-5 backdrop-blur-md sm:mx-0 sm:grid-flow-row sm:auto-cols-auto sm:grid-cols-2 sm:overflow-visible sm:border-x sm:px-0 lg:grid-cols-4"
           role="tablist"
           aria-label="A day at U40"
           onMouseLeave={() => setIsTimelineHovered(false)}
@@ -211,7 +200,7 @@ export function CampusLife() {
                   setActiveMoment(index);
                 }}
                 onFocus={() => setActiveMoment(index)}
-                className={`group relative flex min-h-[4.5rem] cursor-pointer items-center gap-4 overflow-hidden border-b border-r border-white/15 px-4 py-3 text-left transition duration-300 sm:min-h-[5rem] sm:px-5 ${isActive ? "bg-[#d9f66f] text-[#111318]" : "text-white hover:bg-white/[0.08]"}`}
+                className={`group relative flex min-h-[5rem] snap-start cursor-pointer items-center gap-4 overflow-hidden border-b border-r border-white/15 px-4 py-3 text-left transition duration-300 sm:px-5 ${isActive ? "bg-[#d9f66f] text-[#111318]" : "text-white hover:bg-white/[0.08] active:bg-white/[0.08]"}`}
               >
                 <span
                   className={`font-mono text-[11px] font-semibold ${isActive ? "text-black/70" : "text-[#d9f66f]"}`}

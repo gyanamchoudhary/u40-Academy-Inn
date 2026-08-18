@@ -133,9 +133,9 @@ export function ApplicationForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="admission-form border border-black/15 bg-white p-6 sm:p-8"
+      className="admission-form border border-black/15 bg-white p-5 sm:p-8"
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col items-start gap-4 sm:flex-row sm:justify-between">
         <div>
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2046d8]">
             Online admission inquiry
@@ -156,6 +156,7 @@ export function ApplicationForm() {
             onChange={(event) => update("studentName", event.target.value)}
             placeholder="Enter full name"
             required
+            autoComplete="name"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -167,6 +168,7 @@ export function ApplicationForm() {
             onChange={(event) => update("guardianName", event.target.value)}
             placeholder="Father / mother / guardian"
             required
+            autoComplete="name"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -179,6 +181,7 @@ export function ApplicationForm() {
             placeholder="+91 62966 17524"
             required
             inputMode="tel"
+            autoComplete="tel"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -190,6 +193,7 @@ export function ApplicationForm() {
             value={form.email}
             onChange={(event) => update("email", event.target.value)}
             placeholder="student@example.com"
+            autoComplete="email"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -200,6 +204,7 @@ export function ApplicationForm() {
             type="date"
             value={form.dateOfBirth}
             onChange={(event) => update("dateOfBirth", event.target.value)}
+            autoComplete="bday"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -209,7 +214,7 @@ export function ApplicationForm() {
             value={form.currentClass}
             onValueChange={(value) => update("currentClass", value as FormState["currentClass"])}
           >
-            <SelectTrigger id="currentClass" className="h-12 border-slate-200 bg-white">
+            <SelectTrigger id="currentClass" className="h-12 border-slate-200 bg-white data-[size=default]:h-12">
               <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
@@ -227,7 +232,7 @@ export function ApplicationForm() {
             value={form.courseInterested}
             onValueChange={(value) => update("courseInterested", value as FormState["courseInterested"])}
           >
-            <SelectTrigger id="courseInterested" className="h-12 border-slate-200 bg-white">
+            <SelectTrigger id="courseInterested" className="h-12 border-slate-200 bg-white data-[size=default]:h-12">
               <SelectValue placeholder="Select course" />
             </SelectTrigger>
             <SelectContent>
@@ -245,7 +250,7 @@ export function ApplicationForm() {
             value={form.board}
             onValueChange={(value) => update("board", value as FormState["board"])}
           >
-            <SelectTrigger id="board" className="h-12 border-slate-200 bg-white">
+            <SelectTrigger id="board" className="h-12 border-slate-200 bg-white data-[size=default]:h-12">
               <SelectValue placeholder="Select board" />
             </SelectTrigger>
             <SelectContent>
@@ -264,6 +269,7 @@ export function ApplicationForm() {
             value={form.previousPercentage}
             onChange={(event) => update("previousPercentage", event.target.value)}
             placeholder="Example: 85%"
+            inputMode="decimal"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -274,6 +280,7 @@ export function ApplicationForm() {
             value={form.schoolName}
             onChange={(event) => update("schoolName", event.target.value)}
             placeholder="Last attended school"
+            autoComplete="organization"
             className="h-12 border-slate-200 bg-white"
           />
         </div>
@@ -285,6 +292,7 @@ export function ApplicationForm() {
             onChange={(event) => update("address", event.target.value)}
             placeholder="Village / town, post office, district, state and PIN"
             required
+            autoComplete="street-address"
             className="min-h-24 border-slate-200 bg-white"
           />
         </div>

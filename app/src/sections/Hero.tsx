@@ -5,7 +5,7 @@ import { heroStats } from "@/data/institute";
 
 export function Hero() {
   return (
-    <section id="top" className="relative min-h-[100dvh] overflow-hidden bg-[#071a2d] text-white">
+    <section id="top" className="relative min-h-[100svh] overflow-hidden bg-[#071a2d] text-white">
       <OptimizedImage
         src="/assets/u40-hostel-exterior.png"
         alt="U40 Academy Inn residential building in Malda"
@@ -19,14 +19,14 @@ export function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,20,38,.96)_0%,rgba(5,20,38,.82)_42%,rgba(5,20,38,.2)_78%,rgba(5,20,38,.08)_100%)]" aria-hidden="true" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#06182b]/90 via-transparent to-[#06182b]/45" aria-hidden="true" />
 
-      <div className="relative mx-auto flex min-h-[100dvh] max-w-[90rem] flex-col justify-end px-5 pb-6 pt-32 sm:px-8 sm:pb-8 lg:px-10">
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[90rem] flex-col justify-end px-5 pb-6 pt-32 sm:px-8 sm:pb-8 lg:px-10">
         <div className="max-w-[54rem] pb-10 sm:pb-12">
           <div className="flex items-center gap-3">
             <span className="h-2 w-2 bg-[#d9f66f]" />
             <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">Admissions open for 2026–27</span>
           </div>
 
-            <h1 className="mt-7 max-w-[20ch] text-[3.6rem] font-semibold leading-[0.88] tracking-[-0.065em] sm:text-7xl lg:text-[6.4rem] xl:text-[7.4rem]">
+          <h1 className="mt-7 max-w-[20ch] text-[clamp(3.1rem,14.7vw,3.6rem)] font-semibold leading-[0.9] tracking-[-0.04em] sm:text-7xl lg:text-[6rem]">
             Study with purpose. <span className="text-[#d9f66f]">Grow with discipline.</span>
           </h1>
 
@@ -50,15 +50,15 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="grid overflow-hidden border border-white/20 bg-[#081a2b]/80 text-white backdrop-blur-md sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 overflow-hidden border border-white/20 bg-[#081a2b]/80 text-white backdrop-blur-md lg:grid-cols-4">
           {heroStats.map((stat, index) => (
             <div key={stat.label} className={cn(
-              "border-b border-r border-white/15 p-4 sm:p-5",
-              index === heroStats.length - 1 && "border-r-0",
-              index >= 2 && "sm:border-b-0",
-              "lg:border-b-0"
+              "border-b border-r border-white/15 p-4 sm:p-5 lg:border-b-0",
+              index % 2 === 1 && "border-r-0 lg:border-r",
+              index >= 2 && "border-b-0",
+              index === heroStats.length - 1 && "lg:border-r-0"
             )}>
-              <p className="text-3xl font-semibold tabular-nums text-[#d9f66f]">{stat.value}</p>
+              <p className="text-2xl font-semibold tabular-nums text-[#d9f66f] sm:text-3xl">{stat.value}</p>
               <p className="mt-1 text-xs leading-5 text-white/60">{stat.label}</p>
             </div>
           ))}

@@ -52,6 +52,8 @@ const fontFaces = [
   { family: "Roboto Mono", weight: 600, file: "roboto-mono-600.woff2" },
 ];
 
+const fontPreloadFiles = new Set(["manrope-600.woff2"]);
+
 function buildFontCss() {
   return fontFaces
     .map(
@@ -127,6 +129,7 @@ async function prerender() {
   let template = fs.readFileSync(templatePath, "utf-8");
 
   const fontPreloads = fontFaces
+    .filter(font => fontPreloadFiles.has(font.file))
     .map(
       font =>
         `<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${font.file}" crossorigin>`
@@ -138,7 +141,7 @@ async function prerender() {
     `${fontPreloads}\n    ${inlineCss}`
   );
   console.log(
-    `Inlined local font CSS and preloaded ${fontFaces.length} font files`
+    `Inlined local font CSS and preloaded ${fontPreloadFiles.size} critical font file`
   );
 
   for (const route of routes) {
