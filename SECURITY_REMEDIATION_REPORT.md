@@ -17,7 +17,7 @@ All code and repository findings have been remediated. The application now passe
 | U40-H01 plaintext HTTP / no HSTS | Fixed in Worker canonical redirect and response-header middleware; activate by deployment and also enable dashboard Always Use HTTPS. |
 | U40-H02 admission abuse | Fixed with server-validated Turnstile, hostname/action checks, rate-limit binding, honeypot, UUID idempotency, and post-validation email. |
 | U40-M01 browser headers | Fixed with CSP, frame denial, MIME protection, referrer and permissions policies, HSTS on HTTPS, and API no-store/noindex. |
-| U40-M02 external/full-PII email | Fixed: destination is `contact@u40academy.com`; notifications contain only essential callback fields and the database holds full details. |
+| U40-M02 external/full-PII email | Fixed: destination is the verified admissions mailbox `u40academyadmission@gmail.com`; notifications contain only essential callback fields and the database holds full details. |
 | U40-M03 vulnerable Hono | Fixed by upgrade to Hono 4.13.3. |
 | U40-M04 unsafe Docker image | Fixed by removing the unused Docker/Node deployment path. |
 | U40-M05 parallel workers.dev route | Fixed with `workers_dev: false`. |

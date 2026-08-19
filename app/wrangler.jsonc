@@ -36,7 +36,7 @@
   "send_email": [
     {
       "name": "ADMISSIONS_EMAIL",
-      "destination_address": "contact@u40academy.com",
+      "destination_address": "u40academyadmission@gmail.com",
       "remote": true,
     },
   ],

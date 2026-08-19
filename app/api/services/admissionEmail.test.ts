@@ -1,6 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { AdmissionInquiryInput } from "@contracts/admissions";
-import { createAdmissionEmail } from "./admissionEmail";
+import {
+  createAdmissionEmail,
+  sendAdmissionInquiryNotification,
+} from "./admissionEmail";
 
 const inquiry: AdmissionInquiryInput = {
   studentName: "Anik <script>",
@@ -53,5 +56,21 @@ describe("admission notification email", () => {
 
     expect(email.subject).not.toContain("\r");
     expect(email.subject).not.toContain("\n");
+  });
+
+  it("sends every notification to the configured admissions mailbox", async () => {
+    const send = vi.fn().mockResolvedValue(undefined);
+    const binding = { send } as unknown as SendEmail;
+
+    await sendAdmissionInquiryNotification(
+      binding,
+      inquiry,
+      "U40-2026-ABC12345"
+    );
+
+    expect(send).toHaveBeenCalledOnce();
+    expect(send).toHaveBeenCalledWith(
+      expect.objectContaining({ to: "u40academyadmission@gmail.com" })
+    );
   });
 });

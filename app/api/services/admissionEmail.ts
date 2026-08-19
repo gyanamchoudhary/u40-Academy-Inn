@@ -1,6 +1,6 @@
 import type { AdmissionInquiryInput } from "@contracts/admissions";
 
-const NOTIFICATION_DESTINATION = "contact@u40academy.com";
+const NOTIFICATION_DESTINATION = "u40academyadmission@gmail.com";
 const PUBLIC_CONTACT_ADDRESS = "contact@u40academy.com";
 const NOTIFICATION_SENDER = "admissions@u40academy.com";
 

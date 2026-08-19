@@ -25,7 +25,7 @@ Before deployment:
    npx wrangler secret put TURNSTILE_SECRET
    ```
 
-4. Verify `contact@u40academy.com` is an allowed destination for the Send Email binding.
+4. Verify `u40academyadmission@gmail.com` is an active, verified destination for the Send Email binding.
 5. Apply D1 migrations before deploying the Worker.
 
    ```bash
