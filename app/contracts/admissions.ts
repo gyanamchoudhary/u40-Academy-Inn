@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const PRIVACY_NOTICE_VERSION = "2026-08-19";
+
 export const COURSE_OPTIONS = [
   "Foundation Course — Class IX",
   "Foundation Course — Class X",
@@ -27,17 +29,46 @@ export const BOARD_OPTIONS = [
   "Other",
 ] as const;
 
+function hasUnsupportedControlCharacters(value: string, allowLineBreaks: boolean) {
+  return Array.from(value).some(character => {
+    const code = character.charCodeAt(0);
+    if (allowLineBreaks && (code === 9 || code === 10 || code === 13)) return false;
+    return code < 32 || code === 127;
+  });
+}
+
 const optionalText = (max: number, tooLongMessage: string) =>
   z
-    .union([z.string().trim().max(max, tooLongMessage), z.literal("")])
+    .union([
+      z
+        .string()
+        .trim()
+        .max(max, tooLongMessage)
+        .refine(
+          value => !hasUnsupportedControlCharacters(value, true),
+          "Remove unsupported control characters."
+        ),
+      z.literal(""),
+    ])
     .optional()
     .transform(value => (value ? value : undefined));
+
+const singleLineText = (min: number, max: number, minMessage: string, maxMessage: string) =>
+  z
+    .string()
+    .trim()
+    .min(min, minMessage)
+    .max(max, maxMessage)
+    .refine(value => !hasUnsupportedControlCharacters(value, false), {
+      message: "Use a single line without control characters.",
+    });
 
 const optionalEmail = z
   .union([
     z
       .string()
       .trim()
+      .max(254, "Email address must be 254 characters or fewer.")
       .email("Enter a valid email address, for example name@example.com."),
     z.literal(""),
   ])
@@ -46,23 +77,44 @@ const optionalEmail = z
 
 const optionalDate = z
   .union([
-    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Choose a valid date."),
+    z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Choose a valid date.")
+      .refine(value => {
+        const [year, month, day] = value.split("-").map(Number);
+        const date = new Date(Date.UTC(year!, month! - 1, day));
+        const today = new Date();
+        const todayUtc = Date.UTC(
+          today.getUTCFullYear(),
+          today.getUTCMonth(),
+          today.getUTCDate()
+        );
+
+        return (
+          date.getUTCFullYear() === year &&
+          date.getUTCMonth() === month! - 1 &&
+          date.getUTCDate() === day &&
+          date.getTime() <= todayUtc
+        );
+      }, "Choose a real date that is not in the future."),
     z.literal(""),
   ])
   .optional()
   .transform(value => (value ? value : undefined));
 
 export const admissionInquirySchema = z.object({
-  studentName: z
-    .string()
-    .trim()
-    .min(2, "Please enter the student's full name.")
-    .max(120, "Student name must be 120 characters or fewer."),
-  guardianName: z
-    .string()
-    .trim()
-    .min(2, "Please enter the parent or guardian's full name.")
-    .max(120, "Guardian name must be 120 characters or fewer."),
+  studentName: singleLineText(
+    2,
+    120,
+    "Please enter the student's full name.",
+    "Student name must be 120 characters or fewer."
+  ),
+  guardianName: singleLineText(
+    2,
+    120,
+    "Please enter the parent or guardian's full name.",
+    "Guardian name must be 120 characters or fewer."
+  ),
   phone: z
     .string()
     .trim()
@@ -76,10 +128,19 @@ export const admissionInquirySchema = z.object({
   courseInterested: z.enum(COURSE_OPTIONS),
   board: z.enum(BOARD_OPTIONS),
   schoolName: optionalText(160, "School name must be 160 characters or fewer."),
-  previousPercentage: optionalText(
-    20,
-    "Previous percentage must be 20 characters or fewer."
-  ),
+  previousPercentage: z
+    .union([
+      z
+        .string()
+        .trim()
+        .regex(
+          /^(?:100(?:\.0{1,2})?|(?:\d|[1-9]\d)(?:\.\d{1,2})?)%?$/,
+          "Enter a percentage from 0 to 100."
+        ),
+      z.literal(""),
+    ])
+    .optional()
+    .transform(value => (value ? value : undefined)),
   address: z
     .string()
     .trim()
@@ -87,7 +148,11 @@ export const admissionInquirySchema = z.object({
       10,
       "Please enter a complete residential address with town, district and PIN."
     )
-    .max(700, "Residential address must be 700 characters or fewer."),
+    .max(700, "Residential address must be 700 characters or fewer.")
+    .refine(
+      value => !hasUnsupportedControlCharacters(value, true),
+      "Remove unsupported control characters."
+    ),
   message: optionalText(900, "Message must be 900 characters or fewer."),
   consent: z
     .boolean()
@@ -95,6 +160,12 @@ export const admissionInquirySchema = z.object({
       value => value,
       "Please confirm consent before sending the inquiry."
     ),
+  idempotencyKey: z.string().uuid("Refresh the form and try again."),
+  turnstileToken: z
+    .string()
+    .min(1, "Complete the security check before sending the inquiry.")
+    .max(2048, "The security check token is invalid."),
+  website: z.string().max(0, "Unable to submit this inquiry.").optional(),
 });
 
 export type AdmissionInquiryConfirmation = {

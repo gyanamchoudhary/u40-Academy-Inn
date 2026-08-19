@@ -1,3 +1,3 @@
 import { createApp } from "./app";
 
-export default createApp();
+export default createApp() satisfies ExportedHandler<Env>;

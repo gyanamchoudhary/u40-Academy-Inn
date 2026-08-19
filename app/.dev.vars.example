@@ -1,0 +1,4 @@
+# Copy this file to .dev.vars for local Wrangler development.
+# Never commit the real production secret.
+# Cloudflare's documented always-pass test secret. Production uses a Worker secret.
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA

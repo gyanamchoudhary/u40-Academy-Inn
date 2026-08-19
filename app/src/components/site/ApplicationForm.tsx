@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useCallback, useRef, useState, type FormEvent } from "react";
 import { CheckCircle2, Loader2, PhoneCall, Send } from "lucide-react";
 import {
   BOARD_OPTIONS,
@@ -20,6 +20,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
+import {
+  TurnstileWidget,
+  type TurnstileWidgetHandle,
+} from "@/components/site/TurnstileWidget";
+import { isTurnstileConfigured } from "@/lib/turnstileConfig";
 
 type FormState = {
   studentName: string;
@@ -95,7 +100,15 @@ export function ApplicationForm() {
   const [submitted, setSubmitted] =
     useState<AdmissionInquiryConfirmation | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [idempotencyKey, setIdempotencyKey] = useState(() => crypto.randomUUID());
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [securityError, setSecurityError] = useState("");
+  const turnstileRef = useRef<TurnstileWidgetHandle>(null);
   const submitInquiry = trpc.admission.submit.useMutation();
+  const handleTurnstileToken = useCallback((token: string) => {
+    setTurnstileToken(token);
+    if (token) setSecurityError("");
+  }, []);
 
   const update = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setForm(current => ({ ...current, [field]: value }));
@@ -111,6 +124,12 @@ export function ApplicationForm() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!turnstileToken) {
+      setSecurityError("Complete the security check before sending the inquiry.");
+      return;
+    }
+
+    const website = new FormData(event.currentTarget).get("website");
     const payload = {
       ...form,
       phone: form.phone.trim(),
@@ -118,6 +137,9 @@ export function ApplicationForm() {
       schoolName: form.schoolName.trim(),
       previousPercentage: form.previousPercentage.trim(),
       message: form.message.trim(),
+      idempotencyKey,
+      turnstileToken,
+      website: typeof website === "string" ? website : "",
     };
 
     const validation = admissionInquirySchema.safeParse(payload);
@@ -147,7 +169,14 @@ export function ApplicationForm() {
       onSuccess: result => {
         setSubmitted(result);
         setForm(initialForm);
+        setIdempotencyKey(crypto.randomUUID());
+        setTurnstileToken("");
+        setSecurityError("");
         setFieldErrors({});
+      },
+      onError: () => {
+        turnstileRef.current?.reset();
+        setSecurityError("Complete the refreshed security check and try again.");
       },
     });
   };
@@ -248,6 +277,7 @@ export function ApplicationForm() {
             onChange={event => update("studentName", event.target.value)}
             placeholder="Enter full name"
             required
+            maxLength={120}
             autoComplete="name"
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.studentName)}
@@ -267,6 +297,7 @@ export function ApplicationForm() {
             onChange={event => update("guardianName", event.target.value)}
             placeholder="Father / mother / guardian"
             required
+            maxLength={120}
             autoComplete="name"
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.guardianName)}
@@ -286,6 +317,7 @@ export function ApplicationForm() {
             onChange={event => update("phone", event.target.value)}
             placeholder="+91 62966 17524"
             required
+            maxLength={17}
             inputMode="tel"
             autoComplete="tel"
             className="h-12 border-slate-200 bg-white"
@@ -303,6 +335,7 @@ export function ApplicationForm() {
             onChange={event => update("email", event.target.value)}
             placeholder="student@example.com"
             autoComplete="email"
+            maxLength={254}
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.email)}
             aria-describedby={fieldErrors.email ? "email-error" : undefined}
@@ -317,6 +350,7 @@ export function ApplicationForm() {
             value={form.dateOfBirth}
             onChange={event => update("dateOfBirth", event.target.value)}
             autoComplete="bday"
+            max={new Date().toISOString().slice(0, 10)}
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.dateOfBirth)}
             aria-describedby={
@@ -409,6 +443,7 @@ export function ApplicationForm() {
             value={form.previousPercentage}
             onChange={event => update("previousPercentage", event.target.value)}
             placeholder="Example: 85%"
+            maxLength={6}
             inputMode="decimal"
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.previousPercentage)}
@@ -431,6 +466,7 @@ export function ApplicationForm() {
             onChange={event => update("schoolName", event.target.value)}
             placeholder="Last attended school"
             autoComplete="organization"
+            maxLength={160}
             className="h-12 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.schoolName)}
             aria-describedby={
@@ -450,6 +486,7 @@ export function ApplicationForm() {
             placeholder="Village / town, post office, district, state and PIN"
             required
             minLength={10}
+            maxLength={700}
             autoComplete="street-address"
             className="min-h-24 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.address)}
@@ -466,6 +503,7 @@ export function ApplicationForm() {
             value={form.message}
             onChange={event => update("message", event.target.value)}
             placeholder="Tell us about the student’s goals, preferred session or scholarship needs."
+            maxLength={900}
             className="min-h-24 border-slate-200 bg-white"
             aria-invalid={Boolean(fieldErrors.message)}
             aria-describedby={fieldErrors.message ? "message-error" : undefined}
@@ -488,8 +526,15 @@ export function ApplicationForm() {
         />
         <span>
           I consent to U40 Academy Inn contacting me about this admission
-          inquiry and understand that campus admission is completed only after
-          document verification.
+          inquiry as described in the{" "}
+          <a
+            href="/privacy"
+            className="font-semibold text-[#2046d8] underline underline-offset-2"
+          >
+            Privacy Policy
+          </a>
+          , and understand that campus admission is completed only after document
+          verification.
         </span>
       </label>
 
@@ -502,6 +547,24 @@ export function ApplicationForm() {
           {fieldErrors.consent}
         </p>
       ) : null}
+
+      <div className="mt-6 border border-slate-200 bg-white p-4">
+        <p className="mb-3 text-sm font-bold text-[#33373f]">Security check</p>
+        <TurnstileWidget
+          ref={turnstileRef}
+          onTokenChange={handleTurnstileToken}
+        />
+        {securityError ? (
+          <p className="mt-2 text-sm font-bold text-red-700" role="alert">
+            {securityError}
+          </p>
+        ) : null}
+      </div>
+
+      <div className="sr-only" aria-hidden="true">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
 
       {submitInquiry.error ? (
         <div
@@ -519,7 +582,7 @@ export function ApplicationForm() {
 
       <Button
         type="submit"
-        disabled={submitInquiry.isPending}
+        disabled={submitInquiry.isPending || !isTurnstileConfigured}
         className="mt-7 h-14 w-full bg-[#2046d8] text-base font-bold text-white hover:bg-[#1737ae]"
       >
         {submitInquiry.isPending ? (

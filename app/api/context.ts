@@ -6,12 +6,26 @@ export type TrpcContext = {
   resHeaders: Headers;
   db: Database;
   admissionsEmail: SendEmail;
+  admissionRateLimiter: RateLimit;
+  turnstileSecret: string;
+  executionCtx: Pick<ExecutionContext, "waitUntil">;
 };
 
 export async function createContext(
   opts: FetchCreateContextFnOptions,
   db: Database,
-  admissionsEmail: SendEmail
+  admissionsEmail: SendEmail,
+  admissionRateLimiter: RateLimit,
+  turnstileSecret: string,
+  executionCtx: Pick<ExecutionContext, "waitUntil">
 ): Promise<TrpcContext> {
-  return { req: opts.req, resHeaders: opts.resHeaders, db, admissionsEmail };
+  return {
+    req: opts.req,
+    resHeaders: opts.resHeaders,
+    db,
+    admissionsEmail,
+    admissionRateLimiter,
+    turnstileSecret,
+    executionCtx,
+  };
 }

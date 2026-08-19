@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# U40 Academy Inn website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React/Vite frontend and Hono/tRPC API deployed together as a Cloudflare Worker. Admission inquiries are validated with Zod, protected by Turnstile and a Cloudflare rate-limit binding, stored in D1 through Drizzle, and followed by a minimized callback notification through the Cloudflare Send Email binding.
 
-Currently, two official plugins are available:
+## Local setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm ci
+cp .dev.vars.example .dev.vars
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Set `VITE_TURNSTILE_SITE_KEY` in `.env.local`. For local-only UI work, the frontend automatically uses Cloudflare's public always-pass test site key when Vite is in development mode. Put the matching Cloudflare test secret in `.dev.vars`; never reuse test keys in production.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Use `npm run cf:dev` for the full Worker/D1 path. `npm run dev` is suitable for frontend work but still requires Worker bindings for database-backed API calls.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Required production configuration
+
+Before deployment:
+
+1. Create a Turnstile widget restricted to `u40academy.com` and `www.u40academy.com`, with action `admission_inquiry`.
+2. Configure the public site key as `VITE_TURNSTILE_SITE_KEY` in the frontend build environment.
+3. Set the secret without printing or committing it:
+
+   ```bash
+   npx wrangler secret put TURNSTILE_SECRET
+   ```
+
+4. Verify `contact@u40academy.com` is an allowed destination for the Send Email binding.
+5. Apply D1 migrations before deploying the Worker.
+
+   ```bash
+   npx wrangler d1 migrations apply u40-admissions --remote
+   ```
+
+   Migration SQL is reviewed and committed in `db/migrations/`. The vulnerable legacy Drizzle Kit CLI is intentionally not installed; schema changes require a reviewed SQL migration that is validated against a disposable D1 database before production.
+
+6. Run the verification suite:
+
+   ```bash
+   npm test
+   npm run check
+   npm run lint
+   npm run cf:check
+   npm audit --omit=dev
+   ```
+
+The repository enforces HTTPS and security headers in Worker middleware, disables the `workers.dev` route, and runs the Worker before static assets. Dashboard-level WAF managed rules and account access policies should also be reviewed before deployment.
+
+## Security operations
+
+See [`SECURITY_OPERATIONS.md`](./SECURITY_OPERATIONS.md) for rate-limit behavior, secret rotation, logging, incident handling, and the required retention-policy decision.

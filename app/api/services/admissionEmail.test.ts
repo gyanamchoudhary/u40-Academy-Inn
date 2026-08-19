@@ -16,6 +16,9 @@ const inquiry: AdmissionInquiryInput = {
   address: "Malda, West Bengal 732103",
   message: "Please call after 5 PM",
   consent: true,
+  idempotencyKey: "123e4567-e89b-42d3-a456-426614174000",
+  turnstileToken: "test-turnstile-token",
+  website: "",
 };
 
 describe("admission notification email", () => {
@@ -32,5 +35,23 @@ describe("admission notification email", () => {
 
     expect(email.html).toContain("Anik &lt;script&gt;");
     expect(email.html).not.toContain("Anik <script>");
+  });
+
+  it("keeps detailed personal data out of the notification", () => {
+    const email = createAdmissionEmail(inquiry, "U40-2026-ABC12345");
+
+    expect(email.text).not.toContain("Date of birth");
+    expect(email.text).not.toContain("Residential address");
+    expect(email.text).not.toContain("Message:");
+  });
+
+  it("prevents line breaks in the email subject", () => {
+    const email = createAdmissionEmail(
+      { ...inquiry, studentName: "Anik\r\nBcc audit@example.com" },
+      "U40-2026-ABC12345"
+    );
+
+    expect(email.subject).not.toContain("\r");
+    expect(email.subject).not.toContain("\n");
   });
 });

@@ -4,24 +4,47 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "./router";
 import { createContext } from "./context";
 import { createDb } from "./queries/connection";
+import { getCanonicalRedirect, withSecurityHeaders } from "./securityHeaders";
 
-export type WorkerEnv = {
-  DB: D1Database;
-  ASSETS: Fetcher;
-  ADMISSIONS_EMAIL: SendEmail;
-};
+type WorkerEnv = Env & { TURNSTILE_SECRET: string };
 
 export function createApp() {
   const app = new Hono<{ Bindings: WorkerEnv }>();
 
-  app.use("/api/*", bodyLimit({ maxSize: 50 * 1024 * 1024 }));
+  app.use("*", async (c, next) => {
+    const redirect = getCanonicalRedirect(c.req.raw);
+    if (redirect) {
+      return withSecurityHeaders(
+        new Response(null, { status: 308, headers: { Location: redirect.toString() } }),
+        c.req.raw
+      );
+    }
+
+    await next();
+    c.res = withSecurityHeaders(c.res, c.req.raw);
+  });
+
+  app.use(
+    "/api/*",
+    bodyLimit({
+      maxSize: 16 * 1024,
+      onError: c => c.json({ error: "Request body too large" }, 413),
+    })
+  );
   app.use("/api/trpc/*", async c => {
     return fetchRequestHandler({
       endpoint: "/api/trpc",
       req: c.req.raw,
       router: appRouter,
       createContext: opts =>
-        createContext(opts, createDb(c.env.DB), c.env.ADMISSIONS_EMAIL),
+        createContext(
+          opts,
+          createDb(c.env.DB),
+          c.env.ADMISSIONS_EMAIL,
+          c.env.ADMISSION_RATE_LIMITER,
+          c.env.TURNSTILE_SECRET,
+          c.executionCtx
+        ),
     });
   });
   app.all("/api/*", c => c.json({ error: "Not Found" }, 404));

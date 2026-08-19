@@ -3,32 +3,39 @@ import { admissionInquirySchema } from "@contracts/admissions";
 import { createRouter, publicQuery } from "./middleware";
 import { createAdmissionInquiry } from "./queries/admissions";
 import { sendAdmissionInquiryNotification } from "./services/admissionEmail";
+import { enforceAdmissionSecurity } from "./security";
+
+function logFailure(event: string, error: unknown) {
+  console.error(
+    JSON.stringify({
+      event,
+      errorType: error instanceof Error ? error.name : "unknown",
+    })
+  );
+}
 
 export const admissionRouter = createRouter({
   submit: publicQuery
     .input(admissionInquirySchema)
     .mutation(async ({ input, ctx }) => {
       try {
-        const inquiry = await createAdmissionInquiry(ctx.db, input);
+        await enforceAdmissionSecurity(ctx, input.turnstileToken);
+        const result = await createAdmissionInquiry(ctx.db, input);
 
-        try {
-          await sendAdmissionInquiryNotification(
-            ctx.admissionsEmail,
-            input,
-            inquiry.referenceCode
-          );
-        } catch (error) {
-          // The inquiry is already safely stored in D1. Do not make the family
-          // submit it twice if the notification provider has a transient issue.
-          console.error(
-            "Failed to email admission inquiry notification",
-            error
+        if (result.created) {
+          ctx.executionCtx.waitUntil(
+            sendAdmissionInquiryNotification(
+              ctx.admissionsEmail,
+              input,
+              result.confirmation.referenceCode
+            ).catch(error => logFailure("admission_email_failed", error))
           );
         }
 
-        return inquiry;
+        return result.confirmation;
       } catch (error) {
-        console.error("Failed to create admission inquiry", error);
+        if (error instanceof TRPCError) throw error;
+        logFailure("admission_create_failed", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message:

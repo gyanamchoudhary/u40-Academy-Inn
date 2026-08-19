@@ -5,6 +5,7 @@ export const admissionInquiries = sqliteTable(
   {
     id: integer("id").primaryKey({ autoIncrement: true }),
     referenceCode: text("reference_code").notNull().unique(),
+    idempotencyKey: text("idempotency_key").unique(),
     studentName: text("student_name").notNull(),
     guardianName: text("guardian_name").notNull(),
     phone: text("phone").notNull(),
@@ -25,6 +26,8 @@ export const admissionInquiries = sqliteTable(
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
       .defaultNow(),
+    consentAt: integer("consent_at", { mode: "timestamp_ms" }),
+    privacyNoticeVersion: text("privacy_notice_version"),
   },
   (table) => [
     index("admission_reference_idx").on(table.referenceCode),
